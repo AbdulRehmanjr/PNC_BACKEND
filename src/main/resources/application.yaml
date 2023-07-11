@@ -1,0 +1,25 @@
+spring:
+    application:
+            name: PNC
+    datasource:
+        url: jdbc:mysql://localhost:3306/PNC?createDatabaseIfNotExist=true&serverTimezone=UTC&&useSSL=false&allowPublicKeyRetrieval=true
+        username: spydev
+        password: abdul101
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                    dialect: org.hibernate.dialect.MySQLDialect 
+                    formate_sql: true 
+    servlet:
+        multipart:
+                max-file-size: 20MB
+                max-request-size: 20MB
+server:       
+    servlet:
+        context-path: /api/v1
+        
+logging:
+    level:
+        root: INFO
