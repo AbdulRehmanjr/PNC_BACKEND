@@ -3,8 +3,8 @@ spring:
             name: PNC
     datasource:
         url: jdbc:mysql://localhost:3306/PNC?createDatabaseIfNotExist=true&serverTimezone=UTC&&useSSL=false&allowPublicKeyRetrieval=true
-        username: spydev
-        password: abdul101
+        username: lawtask
+        password: lawtask@23
     jpa:
         hibernate:
             ddl-auto: update
