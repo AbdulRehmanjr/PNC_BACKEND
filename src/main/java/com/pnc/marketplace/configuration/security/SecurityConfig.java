@@ -25,7 +25,6 @@ import com.pnc.marketplace.configuration.jwt.JwtAuthenticationFilter;
 import com.pnc.marketplace.utils.UserDetailService;
 
 
-
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig  {
@@ -39,7 +38,7 @@ public class SecurityConfig  {
 
         private String[] origins = { "http://localhost:4200" };
 
-        private final String[] PUBLICURI= {"/user/create","/token/**"};
+        private final String[] PUBLICURI= {"/user/create","/token/**","/category/**","/seller/**"};
 
         @Bean
         AuthenticationProvider authenticationProvider() {
