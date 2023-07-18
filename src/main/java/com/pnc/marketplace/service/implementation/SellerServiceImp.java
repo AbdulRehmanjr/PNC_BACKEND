@@ -82,7 +82,7 @@ public class SellerServiceImp implements SellerService {
 
     @Override
     public Seller getSellerByEmail(String email) {
-        Seller response = this.sellerRepo.findBySellerEmail(email);
+        Seller response = this.sellerRepo.findByEmail(email);
 
         if (response != null)
             return response;

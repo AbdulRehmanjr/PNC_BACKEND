@@ -6,5 +6,5 @@ import com.pnc.marketplace.model.seller.Seller;
 
 public interface SellerRepository extends JpaRepository<Seller,Integer>{
     
-    Seller findBySellerEmail(String email);
+    Seller findByEmail(String email);
 }
