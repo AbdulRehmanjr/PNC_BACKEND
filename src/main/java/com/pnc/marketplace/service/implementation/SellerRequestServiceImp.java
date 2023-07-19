@@ -115,16 +115,14 @@ public class SellerRequestServiceImp implements SellerRequestService {
         return null;
     }
 
-    // The `acceptRequest` method is used to accept a seller request by updating the `accepted` field
-    // of the `SellerRequest` object with the given `id` to `true`. It also sets the `remarks` field
-    // with a formatted message indicating that the request has been approved by the administration.
+
     @Override
-    public SellerRequest acceptRequest(int id) {
+    public SellerRequest acceptRequest(int sellerId) {
         
-        SellerRequest response = this.srRepo.findById(id).orElse(null);
+        SellerRequest response = this.srRepo.findById(sellerId).orElse(null);
 
         if(response==null){
-            log.error("No seller found with given Id {}",id);
+            log.error("No seller found with given Id {}",sellerId);
             return null;
         }
 
@@ -145,17 +143,24 @@ public class SellerRequestServiceImp implements SellerRequestService {
         if(response!=null)
             return response;
         
-        log.error("Error in updating the request with Id {}",id);
+        log.error("Error in updating the request with Id {}",sellerId);
         return null;
     }
 
    
+    // The `rejectRequest` method is used to reject a seller request by updating the `accepted` field
+    // of the `SellerRequest` object with the given `id` to `false`. It also sets the `remarks` field
+    // with a formatted message indicating that the request has been rejected by the administration.
+    // The method retrieves the `SellerRequest` object from the repository based on the provided `id`,
+    // updates the necessary fields, and saves the updated object back to the repository. If the update
+    // is successful, the updated `SellerRequest` object is returned. If there is an error during the
+    // update process, an error message is logged and `null` is returned.
     @Override
-    public SellerRequest rejectRequest(int id) {
-        SellerRequest response = this.srRepo.findById(id).orElse(null);
+    public SellerRequest rejectRequest(int sellerId) {
+        SellerRequest response = this.srRepo.findById(sellerId).orElse(null);
 
         if(response==null){
-            log.error("No seller found with given Id {}",id);
+            log.error("No seller found with given Id {}",sellerId);
             return null;
         }
 
@@ -176,7 +181,7 @@ public class SellerRequestServiceImp implements SellerRequestService {
         if(response!=null)
             return response;
         
-        log.error("Error in updating the request with Id {}",id);
+        log.error("Error in updating the request with Id {}",sellerId);
         return null;
     }
 

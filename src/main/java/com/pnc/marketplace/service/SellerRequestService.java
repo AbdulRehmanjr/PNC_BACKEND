@@ -55,7 +55,7 @@ public interface SellerRequestService {
      * @param id The unique identifier of the seller request that needs to be accepted.
      * @return The method acceptRequest is returning an object of type SellerRequest.
      */
-    SellerRequest acceptRequest(int id);
+    SellerRequest acceptRequest(int sellerId);
 
     /**
      * The function "rejectRequest" rejects a seller request and returns the rejected request.
@@ -64,7 +64,7 @@ public interface SellerRequestService {
      * request that needs to be rejected.
      * @return The method is returning a SellerRequest object.
      */
-    SellerRequest rejectRequest(int id);
+    SellerRequest rejectRequest(int sellerId);
 
     /**
      * The function "updateSeller" takes a SellerRequest object as input and returns a SellerRequest

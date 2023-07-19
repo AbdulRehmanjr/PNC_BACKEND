@@ -38,7 +38,7 @@ public class SecurityConfig  {
 
         private String[] origins = { "http://localhost:4200" };
 
-        private final String[] PUBLICURI= {"/user/create","/token/**","/category/**","/seller/**"};
+        private final String[] PUBLICURI= {"/user/**","/token/**","/category/**","/seller/**","/sellerrequest/**"};
 
         @Bean
         AuthenticationProvider authenticationProvider() {
