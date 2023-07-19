@@ -60,6 +60,26 @@ public class SellerServiceImp implements SellerService {
     }
 
     /**
+     * The function saves a seller object and returns the saved seller if successful, otherwise it logs
+     * an error and returns null.
+     * 
+     * @param seller The parameter "seller" is an object of type "Seller" that represents the seller to
+     * be saved.
+     * @return The method is returning a Seller object.
+     */
+    @Override
+    public Seller saveSeller(Seller seller) {
+
+        Seller response = this.sellerRepo.save(seller);
+
+        if (response != null)
+            return response;
+
+        log.error("Error in saving seller");
+        return null;
+    }
+
+    /**
      * The function getSellerById retrieves a Seller object from the sellerRepo
      * based on the given id,
      * and returns it if found, otherwise logs an error and returns null.

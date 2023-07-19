@@ -46,12 +46,12 @@ public class UserServiceImp implements UserService {
     @Override
     public User saveUser(User user,MultipartFile photo) {
 
-        log.info("inserting new user in database");
+    
 
         Role role = this.roleRepo.findByRoleName(DEFAULT_USER);
 
         if (role == null) {
-            log.info("No role found with given name {}", DEFAULT_USER);
+            log.error("No role found with given name {}", DEFAULT_USER);
             return null;
         }
 

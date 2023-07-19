@@ -20,6 +20,14 @@ public interface SellerService {
     Seller saveSeller(Seller seller,MultipartFile picture);
 
     /**
+     * The function saves a seller object and returns the saved seller.
+     * 
+     * @param seller The seller object that needs to be saved.
+     * @return The method saveSeller is returning an object of type Seller.
+     */
+    Seller saveSeller(Seller seller);
+
+    /**
      * The function getSellerById returns a Seller object based on the given id.
      * 
      * @param id An integer representing the unique identifier of the seller.
