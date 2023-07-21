@@ -19,13 +19,6 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
-      run: mvn clean install
-
-    - name: Create log directory on Droplet
-      run: |
-        ssh root@139.59.215.241 'mkdir -p /project1/logs/pnc'
-
     # Add steps to deploy the application to DigitalOcean droplet
     - name: Install SSH client
       run: sudo apt-get update && sudo apt-get install -y openssh-client
