@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,7 +45,7 @@ public class SellerRequestController {
      * @return The method is returning a ResponseEntity object with a null body.
      */
     @PostMapping("/create")
-    ResponseEntity<?> createRequest(String request, MultipartFile file, MultipartFile picture) {
+    ResponseEntity<?> createRequest(@RequestParam("document") MultipartFile file,@RequestParam("picture") MultipartFile picture,String request) {
 
         SellerRequest req = new SellerRequest();
         ObjectMapper mapper = new ObjectMapper();

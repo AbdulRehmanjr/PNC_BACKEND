@@ -1,5 +1,9 @@
 package com.pnc.marketplace.model.seller;
 
+import java.util.Date;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +31,8 @@ public class SellerRequest {
 
     private String address;
 
+    private String number;
+
     private String category;
 
     private String document;
@@ -34,6 +40,9 @@ public class SellerRequest {
     private boolean isAccepted = false;
 
     private String remarks = "None";
+
+    @CreationTimestamp
+    private Date requestedDate;
 
     public int getRequestId() {
         return requestId;
@@ -121,6 +130,22 @@ public class SellerRequest {
 
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public Date getRequestedDate() {
+        return requestedDate;
+    }
+
+    public void setRequestedDate(Date requestedDate) {
+        this.requestedDate = requestedDate;
     }
 
 }
