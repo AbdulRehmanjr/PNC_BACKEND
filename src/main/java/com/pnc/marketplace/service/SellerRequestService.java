@@ -75,4 +75,12 @@ public interface SellerRequestService {
      * @return The method updateSeller is returning an object of type SellerRequest.
      */
     SellerRequest updateSeller(SellerRequest sellerRequest);
+
+
+    /**
+     * The function countPendingRequests() returns the number of pending requests.
+     * 
+     * @return The count of pending requests.
+     */
+    long countPendingRequests();
 }

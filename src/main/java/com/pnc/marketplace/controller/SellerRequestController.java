@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.rpc.context.AttributeContext.Response;
 import com.pnc.marketplace.model.seller.SellerRequest;
 import com.pnc.marketplace.service.SellerRequestService;
 
@@ -145,6 +146,13 @@ public class SellerRequestController {
         return ResponseEntity.status(404).body(null);
     }
 
+    /**
+     * This function handles the rejection of a seller request by an admin.
+     * 
+     * @param sellerId The sellerId is the unique identifier of the seller whose request is being
+     * rejected.
+     * @return The method is returning a ResponseEntity object.
+     */
     @PostMapping("/reject/{sellerId}")
     ResponseEntity<?> rejectRequest(@PathVariable int sellerId) {
         SellerRequest respone = this.sRService.rejectRequest(sellerId);
@@ -154,5 +162,12 @@ public class SellerRequestController {
 
         log.error("Error in rejecting seller Request by Admin", sellerId);
         return ResponseEntity.status(404).body(null);
+    }
+
+    @GetMapping("/pending")
+    ResponseEntity<?> pendingRequestsCount(){
+
+        long count = this.sRService.countPendingRequests();
+        return ResponseEntity.status(201).body(count);
     }
 }

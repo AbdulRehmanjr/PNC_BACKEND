@@ -116,6 +116,8 @@ public class SellerRequestServiceImp implements SellerRequestService {
     }
 
 
+    // The `acceptRequest` method is used to accept a seller request. It takes an `int` parameter
+    // `sellerId` which represents the ID of the seller request to be accepted.
     @Override
     public SellerRequest acceptRequest(int sellerId) {
         
@@ -148,13 +150,9 @@ public class SellerRequestServiceImp implements SellerRequestService {
     }
 
    
-    // The `rejectRequest` method is used to reject a seller request by updating the `accepted` field
-    // of the `SellerRequest` object with the given `id` to `false`. It also sets the `remarks` field
-    // with a formatted message indicating that the request has been rejected by the administration.
-    // The method retrieves the `SellerRequest` object from the repository based on the provided `id`,
-    // updates the necessary fields, and saves the updated object back to the repository. If the update
-    // is successful, the updated `SellerRequest` object is returned. If there is an error during the
-    // update process, an error message is logged and `null` is returned.
+
+    // The `@Override` annotation is used to indicate that the method `rejectRequest` is overriding a
+    // method from its superclass or implementing an interface method.
     @Override
     public SellerRequest rejectRequest(int sellerId) {
         SellerRequest response = this.srRepo.findById(sellerId).orElse(null);
@@ -185,10 +183,19 @@ public class SellerRequestServiceImp implements SellerRequestService {
         return null;
     }
 
+    // The code snippet you provided is a method declaration for the `updateSeller` method in the
+    // `SellerRequestServiceImp` class.
     @Override
     public SellerRequest updateSeller(SellerRequest sellerRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateSeller'");
+    }
+
+    // The `@Override` annotation indicates that the method `countPendingRequests()` is overriding a
+    // method from its superclass or implementing an interface method.
+    @Override
+    public long countPendingRequests() {
+        return this.srRepo.countByIsAcceptedFalse();
     }
     
 }

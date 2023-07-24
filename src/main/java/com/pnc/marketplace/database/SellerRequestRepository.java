@@ -15,4 +15,12 @@ public interface SellerRequestRepository extends JpaRepository<SellerRequest,Int
      * `Seller` that matches the given email.
      */
     SellerRequest findByEmail(String email); 
+
+   /**
+    * The function countByIsAcceptedFalse() returns the number of records where the isAccepted field is
+    * false.
+    * 
+    * @return The count of items where the "isAccepted" property is false.
+    */
+    long countByIsAcceptedFalse();
 }
