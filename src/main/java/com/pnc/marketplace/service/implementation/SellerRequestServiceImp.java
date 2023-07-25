@@ -25,32 +25,41 @@ public class SellerRequestServiceImp implements SellerRequestService {
     private FireBaseService fbService;
 
     /**
-     * The function saves a SellerRequest object along with two files (document and picture) to a
+     * The function saves a SellerRequest object along with two files (document and
+     * picture) to a
      * database and returns the saved SellerRequest object.
      * 
-     * @param sellerRequest The sellerRequest parameter is an object of type SellerRequest, which
-     * contains information about a seller's request. This object is passed as a parameter to the
-     * method and is used to save the seller request in the database.
-     * @param file The "file" parameter is of type MultipartFile and represents the file that contains
-     * the document for the seller request.
-     * @param picture The "picture" parameter is of type MultipartFile, which is a representation of an
-     * uploaded file received in a multipart request. It contains the details and content of the
-     * picture file uploaded by the user.
+     * @param sellerRequest The sellerRequest parameter is an object of type
+     *                      SellerRequest, which
+     *                      contains information about a seller's request. This
+     *                      object is passed as a parameter to the
+     *                      method and is used to save the seller request in the
+     *                      database.
+     * @param file          The "file" parameter is of type MultipartFile and
+     *                      represents the file that contains
+     *                      the document for the seller request.
+     * @param picture       The "picture" parameter is of type MultipartFile, which
+     *                      is a representation of an
+     *                      uploaded file received in a multipart request. It
+     *                      contains the details and content of the
+     *                      picture file uploaded by the user.
      * @return The method is returning a SellerRequest object.
      */
     @Override
-    public SellerRequest saveSellerRequest(SellerRequest sellerRequest,MultipartFile file,MultipartFile picture) {
-        
+    public SellerRequest saveSellerRequest(SellerRequest sellerRequest, MultipartFile file, MultipartFile picture) {
+
         try {
-            sellerRequest.setDocument(this.fbService.saveFile(file.getOriginalFilename(), file.getInputStream(), file.getContentType()));
-            sellerRequest.setPicture(this.fbService.saveFile(picture.getOriginalFilename(), picture.getInputStream(), picture.getContentType()));
+            sellerRequest.setDocument(
+                    this.fbService.saveFile(file.getOriginalFilename(), file.getInputStream(), file.getContentType()));
+            sellerRequest.setPicture(this.fbService.saveFile(picture.getOriginalFilename(), picture.getInputStream(),
+                    picture.getContentType()));
         } catch (IOException e) {
-            log.error("Error {}, Message {}",e.getClass(),e.getMessage());
+            log.error("Error {}, Message {}", e.getClass(), e.getMessage());
             return null;
         }
 
         SellerRequest response = this.srRepo.save(sellerRequest);
-        if(response!=null)
+        if (response != null)
             return response;
 
         log.error("Error in Saving Seller Request");
@@ -59,27 +68,30 @@ public class SellerRequestServiceImp implements SellerRequestService {
     }
 
     /**
-     * The function retrieves a SellerRequest object by its ID from the repository and returns it, or
+     * The function retrieves a SellerRequest object by its ID from the repository
+     * and returns it, or
      * logs an error and returns null if the object is not found.
      * 
-     * @param id The id parameter is an integer that represents the unique identifier of the seller
-     * request that needs to be fetched.
+     * @param id The id parameter is an integer that represents the unique
+     *           identifier of the seller
+     *           request that needs to be fetched.
      * @return The method is returning a SellerRequest object.
      */
     @Override
     public SellerRequest getById(int id) {
-        
+
         SellerRequest response = this.srRepo.findById(id).orElse(null);
 
-        if(response!=null)
+        if (response != null)
             return response;
-        
-        log.error("Error in fetching seller request by Id {}",id);
+
+        log.error("Error in fetching seller request by Id {}", id);
         return null;
     }
 
     /**
-     * The function retrieves all seller requests from the repository and returns them in a list, or
+     * The function retrieves all seller requests from the repository and returns
+     * them in a list, or
      * logs an error if there is an issue.
      * 
      * @return The method is returning a List of SellerRequest objects.
@@ -88,19 +100,21 @@ public class SellerRequestServiceImp implements SellerRequestService {
     public List<SellerRequest> getAllRequests() {
         List<SellerRequest> response = this.srRepo.findAll();
 
-        if(response!=null)
+        if (response != null)
             return response;
-        
+
         log.error("Error in fetching all seller request");
         return null;
     }
 
     /**
-     * The function retrieves a seller request object from the repository based on the provided email,
+     * The function retrieves a seller request object from the repository based on
+     * the provided email,
      * and logs an error if the request is not found.
      * 
-     * @param email The email parameter is a String that represents the email address of the seller
-     * request that we want to retrieve.
+     * @param email The email parameter is a String that represents the email
+     *              address of the seller
+     *              request that we want to retrieve.
      * @return The method is returning a SellerRequest object.
      */
     @Override
@@ -108,94 +122,79 @@ public class SellerRequestServiceImp implements SellerRequestService {
 
         SellerRequest response = this.srRepo.findByEmail(email);
 
-        if(response!=null)
+        if (response != null)
             return response;
-        
-        log.error("Error in fetching seller request by email {}",email);
+
+        log.error("Error in fetching seller request by email {}", email);
         return null;
     }
 
-
-    // The `acceptRequest` method is used to accept a seller request. It takes an `int` parameter
-    // `sellerId` which represents the ID of the seller request to be accepted.
     @Override
     public SellerRequest acceptRequest(int sellerId) {
-        
+
         SellerRequest response = this.srRepo.findById(sellerId).orElse(null);
 
-        if(response==null){
-            log.error("No seller found with given Id {}",sellerId);
+        if (response == null) {
+            log.error("No seller found with given Id {}", sellerId);
             return null;
         }
 
         response.setAccepted(true);
         String remarks = String.format("""
-                Your Request to become Seller with: 
+                Your Request to become Seller with:
                 Id :%s
-                First Name : %s 
-                Last Name : %s 
+                First Name : %s
+                Last Name : %s
                 Business Category : %s
-                Business Name : %s 
+                Business Name : %s
                 has been approved by Administration.
-                """, response.getRequestId(), response.getFirstName(),response.getLastName(),response.getCategory(),response.getBusinessName());
+                """, response.getRequestId(), response.getFirstName(), response.getLastName(), response.getCategory(),
+                response.getBusinessName());
         response.setRemarks(remarks);
 
         response = this.srRepo.save(response);
 
-        if(response!=null)
+        if (response != null)
             return response;
-        
-        log.error("Error in updating the request with Id {}",sellerId);
+
+        log.error("Error in updating the request with Id {}", sellerId);
         return null;
     }
 
-   
-
-    // The `@Override` annotation is used to indicate that the method `rejectRequest` is overriding a
-    // method from its superclass or implementing an interface method.
     @Override
-    public SellerRequest rejectRequest(int sellerId) {
+    public SellerRequest rejectRequest(int sellerId, String message) {
         SellerRequest response = this.srRepo.findById(sellerId).orElse(null);
-
-        if(response==null){
-            log.error("No seller found with given Id {}",sellerId);
+        if (response == null) {
+            log.error("No seller found with given Id {}", sellerId);
             return null;
         }
-
         response.setAccepted(false);
-        String remarks = String.format("""
-                Your Request to become Seller with: 
-                Id :%s
-                First Name : %s 
-                Last Name : %s 
-                Business Category : %s
-                Business Name : %s 
-                has been rejected by Administration.
-                """, response.getRequestId(), response.getFirstName(),response.getLastName(),response.getCategory(),response.getBusinessName());
-        response.setRemarks(remarks);
-
+        response.setRemarks(message);
         response = this.srRepo.save(response);
-
-        if(response!=null)
+        if (response != null)
             return response;
-        
-        log.error("Error in updating the request with Id {}",sellerId);
+        log.error("Error in updating the request with Id {}", sellerId);
         return null;
     }
 
-    // The code snippet you provided is a method declaration for the `updateSeller` method in the
-    // `SellerRequestServiceImp` class.
-    @Override
     public SellerRequest updateSeller(SellerRequest sellerRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateSeller'");
     }
 
-    // The `@Override` annotation indicates that the method `countPendingRequests()` is overriding a
-    // method from its superclass or implementing an interface method.
     @Override
     public long countPendingRequests() {
         return this.srRepo.countByIsAcceptedFalse();
     }
-    
+
+    @Override
+    public SellerRequest getByUserId(String userId) {
+
+        SellerRequest response = this.srRepo.findByUserId(userId);
+        if (response != null)
+            return response;
+        log.error("Error in fetching request by User Id {}", userId);
+        return null;
+    }
+
 }

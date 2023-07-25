@@ -32,6 +32,14 @@ public interface SellerRequestService {
     SellerRequest getById(int id);
 
     /**
+     * The function getByUserId retrieves a SellerRequest object based on the given userId.
+     * 
+     * @param userId An integer representing the unique identifier of a user.
+     * @return The method is returning a SellerRequest object.
+     */
+    SellerRequest getByUserId(String userId);
+
+    /**
      * The function getAllRequests returns a list of SellerRequest objects.
      * 
      * @return The method getAllRequests() returns a list of SellerRequest objects.
@@ -57,14 +65,16 @@ public interface SellerRequestService {
      */
     SellerRequest acceptRequest(int sellerId);
 
+    
     /**
-     * The function "rejectRequest" rejects a seller request and returns the rejected request.
+     * The function rejectRequest takes a sellerId and a message as input and returns a SellerRequest
+     * object.
      * 
-     * @param id The id parameter is an integer that represents the unique identifier of the seller
-     * request that needs to be rejected.
-     * @return The method is returning a SellerRequest object.
+     * @param sellerId An integer representing the ID of the seller who made the request.
+     * @param message A string containing the reason for rejecting the request.
+     * @return The method rejectRequest returns a SellerRequest object.
      */
-    SellerRequest rejectRequest(int sellerId);
+    SellerRequest rejectRequest(int sellerId,String message);
 
     /**
      * The function "updateSeller" takes a SellerRequest object as input and returns a SellerRequest

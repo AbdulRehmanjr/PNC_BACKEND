@@ -37,6 +37,8 @@ public class SellerRequest {
 
     private String document;
 
+    private String userId;
+
     private boolean isAccepted = false;
 
     private String remarks = "None";
@@ -146,6 +148,14 @@ public class SellerRequest {
 
     public void setRequestedDate(Date requestedDate) {
         this.requestedDate = requestedDate;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

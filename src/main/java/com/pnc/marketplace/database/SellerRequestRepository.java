@@ -14,7 +14,15 @@ public interface SellerRequestRepository extends JpaRepository<SellerRequest,Int
      * @return The method `findByEmail` in the `SellerRepository` class is returning an object of type
      * `Seller` that matches the given email.
      */
-    SellerRequest findByEmail(String email); 
+    SellerRequest findByEmail(String email);    
+
+    /**
+     * The function findByUserId takes a userId as input and returns a SellerRequest object.
+     * 
+     * @param userId A string representing the unique identifier of a user.
+     * @return The method findByUserId(String userId) is returning a SellerRequest object.
+     */
+    SellerRequest findByUserId(String userId);
 
    /**
     * The function countByIsAcceptedFalse() returns the number of records where the isAccepted field is
@@ -23,4 +31,8 @@ public interface SellerRequestRepository extends JpaRepository<SellerRequest,Int
     * @return The count of items where the "isAccepted" property is false.
     */
     long countByIsAcceptedFalse();
+
+
+
+
 }

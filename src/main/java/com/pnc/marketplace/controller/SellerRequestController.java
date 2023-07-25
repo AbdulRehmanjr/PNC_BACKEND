@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.rpc.context.AttributeContext.Response;
 import com.pnc.marketplace.model.seller.SellerRequest;
 import com.pnc.marketplace.service.SellerRequestService;
 
@@ -154,8 +154,8 @@ public class SellerRequestController {
      * @return The method is returning a ResponseEntity object.
      */
     @PostMapping("/reject/{sellerId}")
-    ResponseEntity<?> rejectRequest(@PathVariable int sellerId) {
-        SellerRequest respone = this.sRService.rejectRequest(sellerId);
+    ResponseEntity<?> rejectRequest(@PathVariable int sellerId,@RequestBody String message) {
+        SellerRequest respone = this.sRService.rejectRequest(sellerId,message);
 
         if (respone != null)
             return ResponseEntity.status(201).body(respone);
@@ -164,10 +164,30 @@ public class SellerRequestController {
         return ResponseEntity.status(404).body(null);
     }
 
+   /**
+    * The function "pendingRequestsCount" returns the count of pending requests as a response entity.
+    * 
+    * @return The method is returning a ResponseEntity object.
+    */
     @GetMapping("/pending")
     ResponseEntity<?> pendingRequestsCount(){
 
         long count = this.sRService.countPendingRequests();
         return ResponseEntity.status(201).body(count);
+    }
+
+    /**
+     * This function retrieves a SellerRequest object by the given userId and returns it as a
+     * ResponseEntity.
+     * 
+     * @param userId The userId is a path variable that represents the unique identifier of a user.
+     * @return The method is returning a ResponseEntity object.
+     */
+    @GetMapping("/check-requested/{userId}")
+    ResponseEntity<?> checkRequest(@PathVariable String userId){
+
+        SellerRequest response = this.sRService.getByUserId(userId);
+
+        return ResponseEntity.ok(response);
     }
 }
