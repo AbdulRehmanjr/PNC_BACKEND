@@ -33,9 +33,7 @@ jobs:
           host: ${{ secrets.DROPLET_IP }}
           username: ${{ secrets.DROPLET_USERNAME }}
           key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
-          source: "target/marketplace-0.0.1-SNAPSHOT.jar"
-          target: "/project1/PNC_BACKEND/target/marketplace-0.0.1-SNAPSHOT.jar"
-
+          
       - name: SSH into Droplet and restart application
         uses: appleboy/ssh-action@master
         with:
