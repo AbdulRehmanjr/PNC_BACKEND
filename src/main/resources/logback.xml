@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
-    <property name="LOG_DIR" value="/project1/logs/pnc"></property>
+    <property name="LOG_DIR" value="logs/pnc"></property>
     <property name="FILE_PREFIX" value="pnc"></property>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/${FILE_PREFIX}.log</file>
