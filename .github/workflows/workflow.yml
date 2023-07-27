@@ -28,13 +28,13 @@ jobs:
         run: mvn -B package --file pom.xml
 
       - name: Deploy to Droplet
-        uses: appleboy/scp-action@v1
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DROPLET_IP }}
           username: ${{ secrets.DROPLET_USERNAME }}
           key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
-          source: "target/your-spring-boot-app.jar"
-          target: "/path/to/your/droplet/app-new.jar"
+          source: "target/marketplace-0.0.1-SNAPSHOT.jar"
+          target: "/project1/PNC_BACKEND/target/marketplace-0.0.1-SNAPSHOT.jar"
 
       - name: SSH into Droplet and restart application
         uses: appleboy/ssh-action@master
@@ -43,7 +43,5 @@ jobs:
           username: ${{ secrets.DROPLET_USERNAME }}
           key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
           script: |
-            sudo systemctl stop your-app-service
-            sudo mv /path/to/your/droplet/app.jar /path/to/your/droplet/app-last.jar
-            sudo mv /path/to/your/droplet/app-new.jar /path/to/your/droplet/app.jar
-            sudo systemctl start your-app-service
+            sudo systemctl stop marketplace-0.0.1-SNAPSHOT.jar
+            sudo systemctl start marketplace-0.0.1-SNAPSHOT.jar
