@@ -17,6 +17,7 @@ jobs:
           host: ${{ secrets.DROPLET_IP }}
           username: ${{ secrets.DROPLET_USERNAME }}
           key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
+          passphrase: 'lawtask'
           script: |
             # Go to the directory and stop the jar application
             cd /project1
