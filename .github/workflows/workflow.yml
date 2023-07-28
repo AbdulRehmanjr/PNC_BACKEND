@@ -29,6 +29,9 @@ jobs:
           key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
           passphrase: 'lawtask'
           script: |
+            cd /project1
+            ./stop.sh
+            echo "application stoped"
             cd /project1/PNC_BACKEND
             git pull
             echo "Repo pulled successfully"
@@ -54,8 +57,6 @@ jobs:
           passphrase: 'lawtask'
           script: |
             cd /project1
-            ./stop.sh
-            cd /project1/PNC_BACKEND
             ./start.sh
             echo "Application started successfully"
 
