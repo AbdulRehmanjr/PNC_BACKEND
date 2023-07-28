@@ -35,3 +35,5 @@ jobs:
             # Start the service again
             cd ..
             ./start.sh
+            exit
+            exit
