@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Connect to Droplet and perform tasks
+      - name: Connect to Droplet
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DROPLET_IP }}
@@ -19,21 +19,45 @@ jobs:
           key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
           passphrase: 'lawtask'
           script: |
-            # Go to the directory and stop the jar application
+            echo "Connected to Droplet"
+
+      - name: Pull the Repo
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USERNAME }}
+          key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
+          passphrase: 'lawtask'
+          script: |
+            cd /project1/PNC_BACKEND
+            git pull
+            echo "Repo pulled successfully"
+
+      - name: Build with Maven
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USERNAME }}
+          key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
+          passphrase: 'lawtask'
+          script: |
+            cd /project1/PNC_BACKEND
+            mvn clean install
+            echo "Build completed successfully"
+
+      - name: Start the Application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USERNAME }}
+          key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
+          passphrase: 'lawtask'
+          script: |
             cd /project1
             ./stop.sh
-
-            # Go to the directory where the repository is located
             cd /project1/PNC_BACKEND
-
-            # Update the local repository with the latest changes from the remote
-            git pull
-
-            # Build the project with Maven
-            mvn clean install
-
-            # Start the service again
-            cd ..
             ./start.sh
-            exit
-            exit
+            echo "Application started successfully"
+
+      - name: Confirmation Message
+        run: echo "All tasks completed successfully"
