@@ -57,7 +57,7 @@ jobs:
           passphrase: 'lawtask'
           script: |
             cd /project1
-            ./start.sh &
+            ./start.sh 
             echo "Application started successfully"
 
       - name: Confirmation Message
