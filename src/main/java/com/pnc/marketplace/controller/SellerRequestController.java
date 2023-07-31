@@ -124,6 +124,19 @@ public class SellerRequestController {
         log.error("Error in fetching seller requests");
         return ResponseEntity.status(404).body(null);
     }
+    
+    @GetMapping("/user/{userId}")
+    ResponseEntity<?> fetchByUserId(@PathVariable String userId){
+
+        SellerRequest respone = this.sRService.getByUserId(userId);
+
+        if (respone != null)
+            return ResponseEntity.status(201).body(respone);
+
+        log.error("Error in fetching seller request by Id {}", userId);
+        return ResponseEntity.status(404).body(null);
+    }
+    
 
     /**
      * The function accepts a seller request and returns a response entity with the

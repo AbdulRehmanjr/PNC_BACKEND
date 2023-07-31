@@ -1,4 +1,4 @@
-package com.pnc.marketplace.model;
+package com.pnc.marketplace.model.jwt;
 
 public class JwtRequest {
     private String email;

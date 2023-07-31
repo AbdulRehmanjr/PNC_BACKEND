@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pnc.marketplace.configuration.jwt.JwtUtil;
-import com.pnc.marketplace.model.JwtRequest;
-import com.pnc.marketplace.model.JwtResponse;
 import com.pnc.marketplace.model.User;
+import com.pnc.marketplace.model.jwt.JwtRequest;
+import com.pnc.marketplace.model.jwt.JwtResponse;
 import com.pnc.marketplace.service.UserService;
 import com.pnc.marketplace.utils.UserDetailService;
 

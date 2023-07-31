@@ -93,4 +93,6 @@ public interface SellerRequestService {
      * @return The count of pending requests.
      */
     long countPendingRequests();
+
+    
 }

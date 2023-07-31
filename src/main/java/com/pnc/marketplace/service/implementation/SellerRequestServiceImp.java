@@ -48,9 +48,10 @@ public class SellerRequestServiceImp implements SellerRequestService {
     @Override
     public SellerRequest saveSellerRequest(SellerRequest sellerRequest, MultipartFile file, MultipartFile picture) {
 
+    
         try {
             sellerRequest.setDocument(
-                    this.fbService.saveFile(file.getOriginalFilename(), file.getInputStream(), file.getContentType()));
+                    this.fbService.saveFile(file.getOriginalFilename()+"-document", file.getInputStream(), file.getContentType()));
             sellerRequest.setPicture(this.fbService.saveFile(picture.getOriginalFilename(), picture.getInputStream(),
                     picture.getContentType()));
         } catch (IOException e) {
@@ -129,6 +130,8 @@ public class SellerRequestServiceImp implements SellerRequestService {
         return null;
     }
 
+    // The `@Override` annotation is used to indicate that the method `acceptRequest` is overriding a
+    // method from its superclass or implementing an interface method.
     @Override
     public SellerRequest acceptRequest(int sellerId) {
 
@@ -161,40 +164,60 @@ public class SellerRequestServiceImp implements SellerRequestService {
         return null;
     }
 
+    // The `rejectRequest` method is used to reject a seller request. It takes two parameters:
+    // `sellerId` (an integer representing the unique identifier of the seller request) and `message`
+    // (a string representing the rejection message).
     @Override
     public SellerRequest rejectRequest(int sellerId, String message) {
+
         SellerRequest response = this.srRepo.findById(sellerId).orElse(null);
+
         if (response == null) {
             log.error("No seller found with given Id {}", sellerId);
             return null;
         }
+
         response.setAccepted(false);
         response.setRemarks(message);
+        response.setRejected(true);
+
         response = this.srRepo.save(response);
+
         if (response != null)
             return response;
+
         log.error("Error in updating the request with Id {}", sellerId);
         return null;
     }
 
-    public SellerRequest updateSeller(SellerRequest sellerRequest) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateSeller'");
-    }
 
+    // The `countPendingRequests()` method is used to count the number of pending seller requests in
+    // the repository. It uses the `countByIsAcceptedFalse()` method from the `SellerRequestRepository`
+    // to count the number of seller requests where the `isAccepted` field is set to `false`. This
+    // method returns the count of pending requests as a `long` value.
     @Override
     public long countPendingRequests() {
-        return this.srRepo.countByIsAcceptedFalse();
+        return this.srRepo.countByIsAcceptedFalseAndIsRejectedFalse();
     }
 
+   // The `getByUserId` method is used to retrieve a `SellerRequest` object from the repository based
+   // on the provided `userId`.
     @Override
     public SellerRequest getByUserId(String userId) {
 
         SellerRequest response = this.srRepo.findByUserId(userId);
+
         if (response != null)
             return response;
+
         log.error("Error in fetching request by User Id {}", userId);
         return null;
+    }
+
+    @Override
+    public SellerRequest updateSeller(SellerRequest sellerRequest) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateSeller'");
     }
 
 }

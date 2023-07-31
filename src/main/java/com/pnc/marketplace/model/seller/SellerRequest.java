@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-
 @Entity
 public class SellerRequest {
 
@@ -31,7 +30,7 @@ public class SellerRequest {
 
     private String address;
 
-    private String number;
+    private String phone;
 
     private String category;
 
@@ -40,6 +39,8 @@ public class SellerRequest {
     private String userId;
 
     private boolean isAccepted = false;
+
+    private boolean isRejected = false;
 
     private String remarks = "None";
 
@@ -134,14 +135,6 @@ public class SellerRequest {
         this.businessName = businessName;
     }
 
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
     public Date getRequestedDate() {
         return requestedDate;
     }
@@ -158,4 +151,19 @@ public class SellerRequest {
         this.userId = userId;
     }
 
+    public boolean isRejected() {
+        return isRejected;
+    }
+
+    public void setRejected(boolean isRejected) {
+        this.isRejected = isRejected;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 }

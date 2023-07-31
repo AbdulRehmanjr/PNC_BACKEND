@@ -24,15 +24,13 @@ public interface SellerRequestRepository extends JpaRepository<SellerRequest,Int
      */
     SellerRequest findByUserId(String userId);
 
+   
    /**
-    * The function countByIsAcceptedFalse() returns the number of records where the isAccepted field is
+    * The function counts the number of records where the "isAccepted" and "isRejected" fields are both
     * false.
     * 
-    * @return The count of items where the "isAccepted" property is false.
+    * @return The method `countByIsAcceptedFalseAndIsRejectedFalse()` is returning a `long` value.
     */
-    long countByIsAcceptedFalse();
-
-
-
+ long countByIsAcceptedFalseAndIsRejectedFalse();
 
 }
