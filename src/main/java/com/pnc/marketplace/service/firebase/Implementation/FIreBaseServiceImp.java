@@ -1,4 +1,4 @@
-package com.pnc.marketplace.service.implementation;
+package com.pnc.marketplace.service.firebase.Implementation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +15,7 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.Acl.Role;
 import com.google.cloud.storage.Acl.User;
 import com.google.firebase.cloud.StorageClient;
-import com.pnc.marketplace.service.FireBaseService;
+import com.pnc.marketplace.service.firebase.FireBaseService;
 
 import lombok.extern.slf4j.Slf4j;
 

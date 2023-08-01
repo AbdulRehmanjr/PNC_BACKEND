@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.pnc.marketplace.database.BusinessCategoryRepository;
 import com.pnc.marketplace.model.seller.BusinessCategory;
 import com.pnc.marketplace.service.BusinessCategoryService;
-import com.pnc.marketplace.service.FireBaseService;
+import com.pnc.marketplace.service.firebase.FireBaseService;
 
 import lombok.extern.slf4j.Slf4j;
 

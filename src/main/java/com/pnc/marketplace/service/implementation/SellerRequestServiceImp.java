@@ -9,8 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.pnc.marketplace.database.SellerRequestRepository;
 import com.pnc.marketplace.model.seller.SellerRequest;
-import com.pnc.marketplace.service.FireBaseService;
 import com.pnc.marketplace.service.SellerRequestService;
+import com.pnc.marketplace.service.firebase.FireBaseService;
 
 import lombok.extern.slf4j.Slf4j;
 

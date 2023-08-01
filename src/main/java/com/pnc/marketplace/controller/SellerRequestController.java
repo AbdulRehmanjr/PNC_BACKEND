@@ -150,10 +150,10 @@ public class SellerRequestController {
      */
     @PostMapping("/accept/{sellerId}")
     ResponseEntity<?> acceptRequest(@PathVariable int sellerId) {
-        SellerRequest respone = this.sRService.acceptRequest(sellerId);
+        SellerRequest response = this.sRService.acceptRequest(sellerId);
 
-        if (respone != null)
-            return ResponseEntity.status(201).body(respone);
+        if (response != null)
+            return ResponseEntity.status(201).body(response);
 
         log.error("Error in accepting seller Request by Admin", sellerId);
         return ResponseEntity.status(404).body(null);

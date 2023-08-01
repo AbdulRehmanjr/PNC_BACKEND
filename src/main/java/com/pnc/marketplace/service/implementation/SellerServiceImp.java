@@ -8,8 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.pnc.marketplace.database.SellerRepository;
 import com.pnc.marketplace.model.seller.Seller;
-import com.pnc.marketplace.service.FireBaseService;
 import com.pnc.marketplace.service.SellerService;
+import com.pnc.marketplace.service.firebase.FireBaseService;
 
 import lombok.extern.slf4j.Slf4j;
 
