@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import com.pnc.marketplace.database.RoleRepository;
 import com.pnc.marketplace.database.UserRepository;
 import com.pnc.marketplace.model.Role;
@@ -46,8 +47,6 @@ public class UserServiceImp implements UserService {
     @Override
     public User saveUser(User user,MultipartFile photo) {
 
-    
-
         Role role = this.roleRepo.findByRoleName(DEFAULT_USER);
 
         if (role == null) {
@@ -57,16 +56,19 @@ public class UserServiceImp implements UserService {
 
         user.setRole(role);
         user.setUserPassword(encoder.encode(user.getUserPassword()));
+
         try {
             user.setPhotoUri(this.fbService.saveFile(user.getFirstName().trim()+"-image", photo.getInputStream(), photo.getContentType()));
         } catch (IOException e) {
             log.error("Can't save Image Error {}",e.getCause());
             user.setPhotoUri("assets/placeholder.png");
         }
+        
         User response = this.userRepo.save(user);
 
         if(response == null)
             return null;
+            
         return response;
     }
 

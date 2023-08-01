@@ -1,6 +1,9 @@
 package com.pnc.marketplace.model.seller;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +29,9 @@ public class Seller {
     private String picture;
 
     private String address;
+
+    @JsonProperty(access =  Access.WRITE_ONLY)
+    private String password;
 
     @ManyToOne
     private BusinessCategory category;
@@ -84,6 +90,21 @@ public class Seller {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "Seller [sellerId=" + sellerId + ", firstName=" + firstName + ", lastName=" + lastName + ", email="
+                + email + ", picture=" + picture + ", address=" + address + ", password=" + password + ", category="
+                + category + "]";
     }
 
 }

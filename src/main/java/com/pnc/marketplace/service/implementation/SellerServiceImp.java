@@ -3,6 +3,7 @@ package com.pnc.marketplace.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,10 @@ public class SellerServiceImp implements SellerService {
 
     @Autowired
     private FireBaseService fbService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
 
     /**
      * The function saves a seller object along with a picture file and returns the
@@ -128,6 +133,24 @@ public class SellerServiceImp implements SellerService {
 
         log.error("Error in Sellers list");
         return response;
+    }
+
+    @Override
+    public String updatePassword(String email,String password) {
+        
+        Seller response = this.sellerRepo.findByEmail(email);
+
+        if(response!=null){
+            
+            response.setPassword(this.passwordEncoder.encode(password));
+            
+            response = this.sellerRepo.save(response);
+            return "Password saved";
+        }
+
+        log.error("Error in updating the password");
+        return null;
+
     }
 
 }

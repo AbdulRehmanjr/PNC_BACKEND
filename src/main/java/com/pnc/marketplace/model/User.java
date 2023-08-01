@@ -1,6 +1,9 @@
 package com.pnc.marketplace.model;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,9 +26,10 @@ public class User {
     @Column(unique = true)
     private String userEmail;
 
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String userPassword;
 
-   private String photoUri;
+    private String photoUri;
 
     @ManyToOne
     private Role role;
@@ -38,7 +42,6 @@ public class User {
         this.userId = userId;
     }
 
-  
     public String getUserPassword() {
         return userPassword;
     }
@@ -46,8 +49,6 @@ public class User {
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
     }
-
-   
 
     public Role getRole() {
         return role;
@@ -87,5 +88,11 @@ public class User {
 
     public void setPhotoUri(String photoUri) {
         this.photoUri = photoUri;
+    }
+
+    @Override
+    public String toString() {
+        return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", userEmail="
+                + userEmail + ", userPassword=" + userPassword + ", photoUri=" + photoUri + ", role=" + role + "]";
     }
 }

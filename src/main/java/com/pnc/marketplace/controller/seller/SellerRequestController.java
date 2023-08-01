@@ -1,4 +1,4 @@
-package com.pnc.marketplace.controller;
+package com.pnc.marketplace.controller.seller;
 
 import java.util.List;
 

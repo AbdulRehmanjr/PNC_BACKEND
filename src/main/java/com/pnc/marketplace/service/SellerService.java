@@ -49,4 +49,14 @@ public interface SellerService {
      * @return The method getAllSellers() returns a list of objects of type Seller.
      */
     List<Seller> getAllSellers();
+
+    /**
+     * The function updatePassword takes an email as input and returns a string representing the
+     * updated password.
+     * 
+     * @param email A string representing the email address of the user for whom the password needs to
+     * be updated.
+     * @return The method is returning a String value.
+     */
+    String updatePassword(String email,String password);
 }

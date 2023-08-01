@@ -8,8 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pnc.marketplace.database.SellerRequestRepository;
+import com.pnc.marketplace.model.seller.BusinessCategory;
+import com.pnc.marketplace.model.seller.Seller;
 import com.pnc.marketplace.model.seller.SellerRequest;
+import com.pnc.marketplace.service.BusinessCategoryService;
 import com.pnc.marketplace.service.SellerRequestService;
+import com.pnc.marketplace.service.SellerService;
 import com.pnc.marketplace.service.firebase.FireBaseService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +24,12 @@ public class SellerRequestServiceImp implements SellerRequestService {
 
     @Autowired
     private SellerRequestRepository srRepo;
+
+    @Autowired
+    private SellerService sellerService;
+
+    @Autowired
+    private BusinessCategoryService bcService;
 
     @Autowired
     private FireBaseService fbService;
@@ -48,10 +58,10 @@ public class SellerRequestServiceImp implements SellerRequestService {
     @Override
     public SellerRequest saveSellerRequest(SellerRequest sellerRequest, MultipartFile file, MultipartFile picture) {
 
-    
         try {
             sellerRequest.setDocument(
-                    this.fbService.saveFile(file.getOriginalFilename()+"-document", file.getInputStream(), file.getContentType()));
+                    this.fbService.saveFile(file.getOriginalFilename() + "-document", file.getInputStream(),
+                            file.getContentType()));
             sellerRequest.setPicture(this.fbService.saveFile(picture.getOriginalFilename(), picture.getInputStream(),
                     picture.getContentType()));
         } catch (IOException e) {
@@ -60,8 +70,10 @@ public class SellerRequestServiceImp implements SellerRequestService {
         }
 
         SellerRequest response = this.srRepo.save(sellerRequest);
-        if (response != null)
+
+        if (response != null) {
             return response;
+        }
 
         log.error("Error in Saving Seller Request");
         return null;
@@ -130,7 +142,8 @@ public class SellerRequestServiceImp implements SellerRequestService {
         return null;
     }
 
-    // The `@Override` annotation is used to indicate that the method `acceptRequest` is overriding a
+    // The `@Override` annotation is used to indicate that the method
+    // `acceptRequest` is overriding a
     // method from its superclass or implementing an interface method.
     @Override
     public SellerRequest acceptRequest(int sellerId) {
@@ -157,15 +170,37 @@ public class SellerRequestServiceImp implements SellerRequestService {
 
         response = this.srRepo.save(response);
 
-        if (response != null)
-            return response;
+        if (response != null){
+            //* saving seller 
+            Seller seller = new Seller();
 
-        log.error("Error in updating the request with Id {}", sellerId);
-        return null;
+            seller.setFirstName(response.getFirstName());
+            seller.setLastName(response.getLastName());
+            seller.setAddress(response.getAddress());
+            seller.setPicture(response.getPicture());
+            seller.setEmail(response.getEmail());
+
+            BusinessCategory category = this.bcService.getCategoryByName(response.getCategory());
+
+            seller.setPassword("NONE");
+            seller.setCategory(category);
+
+            try {
+                seller = this.sellerService.saveSeller(seller);
+                return response;
+            } catch (Exception e) {
+                log.error("Seller Saving Error");
+                log.error("Error in updating the request with Id {}", sellerId);
+                return null;
+            }
+        }
+       return null;
     }
 
-    // The `rejectRequest` method is used to reject a seller request. It takes two parameters:
-    // `sellerId` (an integer representing the unique identifier of the seller request) and `message`
+    // The `rejectRequest` method is used to reject a seller request. It takes two
+    // parameters:
+    // `sellerId` (an integer representing the unique identifier of the seller
+    // request) and `message`
     // (a string representing the rejection message).
     @Override
     public SellerRequest rejectRequest(int sellerId, String message) {
@@ -190,18 +225,21 @@ public class SellerRequestServiceImp implements SellerRequestService {
         return null;
     }
 
-
-    // The `countPendingRequests()` method is used to count the number of pending seller requests in
-    // the repository. It uses the `countByIsAcceptedFalse()` method from the `SellerRequestRepository`
-    // to count the number of seller requests where the `isAccepted` field is set to `false`. This
+    // The `countPendingRequests()` method is used to count the number of pending
+    // seller requests in
+    // the repository. It uses the `countByIsAcceptedFalse()` method from the
+    // `SellerRequestRepository`
+    // to count the number of seller requests where the `isAccepted` field is set to
+    // `false`. This
     // method returns the count of pending requests as a `long` value.
     @Override
     public long countPendingRequests() {
         return this.srRepo.countByIsAcceptedFalseAndIsRejectedFalse();
     }
 
-   // The `getByUserId` method is used to retrieve a `SellerRequest` object from the repository based
-   // on the provided `userId`.
+    // The `getByUserId` method is used to retrieve a `SellerRequest` object from
+    // the repository based
+    // on the provided `userId`.
     @Override
     public SellerRequest getByUserId(String userId) {
 
