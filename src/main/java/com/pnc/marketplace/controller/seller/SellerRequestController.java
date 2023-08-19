@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pnc.marketplace.model.seller.SellerRequest;
-import com.pnc.marketplace.service.SellerRequestService;
+import com.pnc.marketplace.service.seller.SellerRequestService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -125,13 +125,21 @@ public class SellerRequestController {
         return ResponseEntity.status(404).body(null);
     }
     
+   /**
+    * The function fetches a seller request by its user ID and returns a response entity with the
+    * seller request if found, or an error message if not found.
+    * 
+    * @param userId The userId is a path variable that is used to identify a specific user. It is
+    * passed as a parameter in the URL path.
+    * @return The method is returning a ResponseEntity object.
+    */
     @GetMapping("/user/{userId}")
     ResponseEntity<?> fetchByUserId(@PathVariable String userId){
 
-        SellerRequest respone = this.sRService.getByUserId(userId);
+        SellerRequest response = this.sRService.getByUserId(userId);
 
-        if (respone != null)
-            return ResponseEntity.status(201).body(respone);
+        if (response != null)
+            return ResponseEntity.status(201).body(response);
 
         log.error("Error in fetching seller request by Id {}", userId);
         return ResponseEntity.status(404).body(null);

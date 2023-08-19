@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pnc.marketplace.model.seller.Seller;
-import com.pnc.marketplace.service.SellerService;
+import com.pnc.marketplace.service.seller.SellerService;
 
 import lombok.extern.slf4j.Slf4j;
 
