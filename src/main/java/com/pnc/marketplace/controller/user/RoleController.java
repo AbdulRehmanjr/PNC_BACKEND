@@ -1,4 +1,4 @@
-package com.pnc.marketplace.controller;
+package com.pnc.marketplace.controller.user;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pnc.marketplace.model.Role;
-import com.pnc.marketplace.service.RoleService;
+import com.pnc.marketplace.service.user.RoleService;
 
 @RestController
 @RequestMapping("role")

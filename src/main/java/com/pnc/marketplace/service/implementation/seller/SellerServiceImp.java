@@ -1,4 +1,4 @@
-package com.pnc.marketplace.service.seller.implementation;
+package com.pnc.marketplace.service.implementation.seller;
 
 import java.util.List;
 

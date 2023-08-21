@@ -1,4 +1,4 @@
-package com.pnc.marketplace.controller;
+package com.pnc.marketplace.controller.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import com.pnc.marketplace.configuration.jwt.JwtUtil;
 import com.pnc.marketplace.model.User;
 import com.pnc.marketplace.model.jwt.JwtRequest;
 import com.pnc.marketplace.model.jwt.JwtResponse;
-import com.pnc.marketplace.service.UserService;
+import com.pnc.marketplace.service.user.UserService;
 import com.pnc.marketplace.utils.UserDetailService;
 
 import lombok.extern.slf4j.Slf4j;

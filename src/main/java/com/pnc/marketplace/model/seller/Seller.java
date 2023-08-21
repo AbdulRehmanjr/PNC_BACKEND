@@ -36,6 +36,8 @@ public class Seller {
     @ManyToOne
     private BusinessCategory category;
 
+    private Boolean isActive = false;
+
     public int getSellerId() {
         return sellerId;
     }
@@ -105,6 +107,14 @@ public class Seller {
         return "Seller [sellerId=" + sellerId + ", firstName=" + firstName + ", lastName=" + lastName + ", email="
                 + email + ", picture=" + picture + ", address=" + address + ", password=" + password + ", category="
                 + category + "]";
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
 }

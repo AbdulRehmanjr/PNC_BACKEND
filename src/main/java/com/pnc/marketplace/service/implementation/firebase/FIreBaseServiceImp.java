@@ -1,4 +1,4 @@
-package com.pnc.marketplace.service.firebase.Implementation;
+package com.pnc.marketplace.service.implementation.firebase;
 
 import java.io.IOException;
 import java.io.InputStream;

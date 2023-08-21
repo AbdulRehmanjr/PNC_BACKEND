@@ -1,4 +1,4 @@
-package com.pnc.marketplace.controller;
+package com.pnc.marketplace.controller.seller;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pnc.marketplace.model.seller.BusinessCategory;
-import com.pnc.marketplace.service.BusinessCategoryService;
+import com.pnc.marketplace.service.seller.BusinessCategoryService;
 
 import lombok.extern.slf4j.Slf4j;
 

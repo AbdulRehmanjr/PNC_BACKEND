@@ -1,4 +1,4 @@
-package com.pnc.marketplace.service.implementation;
+package com.pnc.marketplace.service.implementation.user;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,8 +13,8 @@ import com.pnc.marketplace.database.RoleRepository;
 import com.pnc.marketplace.database.UserRepository;
 import com.pnc.marketplace.model.Role;
 import com.pnc.marketplace.model.User;
-import com.pnc.marketplace.service.UserService;
 import com.pnc.marketplace.service.firebase.FireBaseService;
+import com.pnc.marketplace.service.user.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 

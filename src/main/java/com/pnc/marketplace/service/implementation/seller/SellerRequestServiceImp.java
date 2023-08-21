@@ -1,4 +1,4 @@
-package com.pnc.marketplace.service.seller.implementation;
+package com.pnc.marketplace.service.implementation.seller;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,8 +11,8 @@ import com.pnc.marketplace.database.SellerRequestRepository;
 import com.pnc.marketplace.model.seller.BusinessCategory;
 import com.pnc.marketplace.model.seller.Seller;
 import com.pnc.marketplace.model.seller.SellerRequest;
-import com.pnc.marketplace.service.BusinessCategoryService;
 import com.pnc.marketplace.service.firebase.FireBaseService;
+import com.pnc.marketplace.service.seller.BusinessCategoryService;
 import com.pnc.marketplace.service.seller.SellerRequestService;
 import com.pnc.marketplace.service.seller.SellerService;
 

@@ -1,4 +1,4 @@
-package com.pnc.marketplace.controller;
+package com.pnc.marketplace.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

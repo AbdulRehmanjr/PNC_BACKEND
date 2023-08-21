@@ -1,4 +1,4 @@
-package com.pnc.marketplace.service.implementation;
+package com.pnc.marketplace.service.implementation.user;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.pnc.marketplace.database.RoleRepository;
 import com.pnc.marketplace.model.Role;
-import com.pnc.marketplace.service.RoleService;
+import com.pnc.marketplace.service.user.RoleService;
 
 import lombok.extern.slf4j.Slf4j;
 

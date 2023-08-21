@@ -25,3 +25,16 @@ server:
 logging:
     level:
         root: INFO
+
+# custom variables
+
+web:
+    domain : http://localhost:4200
+
+stripe:
+    webhook: whsec_dab51112fcb3a579d7ecd42b56f103c1fbbe197877caf3a2b810c7d76f4d14b4
+    secert: sk_test_51N7ejkIjEpaQ2NJZFsDwXUbo3zMECQjLqG3W8vycxbzv3AmFAYGlnYHS1G3PxnOTr1KSkCv7M1MWLxGjB9X0yg8v0062kXo6aZ
+    product:
+        stall: price_1NhZSdIjEpaQ2NJZy1b56phx
+        bazaar: price_1NhZTCIjEpaQ2NJZnMjAEcfG
+        elite: price_1NhZU4IjEpaQ2NJZuAnxDFZx
