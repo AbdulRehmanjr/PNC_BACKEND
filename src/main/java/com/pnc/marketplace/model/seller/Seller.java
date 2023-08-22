@@ -40,6 +40,8 @@ public class Seller {
 
     private String sellerType = "NONE";
 
+    private int maxProducts=0;
+
     public int getSellerId() {
         return sellerId;
     }
@@ -104,13 +106,7 @@ public class Seller {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "Seller [sellerId=" + sellerId + ", firstName=" + firstName + ", lastName=" + lastName + ", email="
-                + email + ", picture=" + picture + ", address=" + address + ", password=" + password + ", category="
-                + category + "]";
-    }
-
+  
     public Boolean getIsActive() {
         return isActive;
     }
@@ -126,5 +122,15 @@ public class Seller {
     public void setSellerType(String sellerType) {
         this.sellerType = sellerType;
     }
+
+    public int getMaxProducts() {
+        return maxProducts;
+    }
+
+    public void setMaxProducts(int maxProducts) {
+        this.maxProducts = maxProducts;
+    }
+
+
 
 }

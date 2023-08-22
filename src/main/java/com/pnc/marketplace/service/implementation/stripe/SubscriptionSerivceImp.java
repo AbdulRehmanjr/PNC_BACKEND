@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.pnc.marketplace.database.stripe.SubscriptionRepository;
+import com.pnc.marketplace.model.stripe.Subscription;
 import com.pnc.marketplace.service.stripe.SubscriptionService;
 import com.pnc.marketplace.utils.StripeUtils;
 import com.pnc.marketplace.utils.enums.ProductAllowed;
@@ -59,8 +60,7 @@ public class SubscriptionSerivceImp implements SubscriptionService{
             //* New subscription            
             selectedSubscription = ProductAllowed.valueOf(type.toUpperCase());
         } else {
-            log.info("Current Subscription: {}",currentSubscription);
-            log.info("Selected ", selectedSubscription);
+
             switch (currentSubscription) {
                 case STARTERSTALL:
                     if ("STARTERSTALL".equals(type) || "LOCALBAZAAR".equals(type)) 
@@ -80,7 +80,7 @@ public class SubscriptionSerivceImp implements SubscriptionService{
         if (selectedSubscription != null) {
             SessionCreateParams params = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.SUBSCRIPTION)
-                    .setSuccessUrl(Domain + "/home")
+                    .setSuccessUrl(Domain + "/home/become-seller")
                     .setCancelUrl(Domain + "/home/subscription-cards")
                     .setCustomer(customer.getId())
                     .addLineItem(
@@ -124,8 +124,14 @@ public class SubscriptionSerivceImp implements SubscriptionService{
 
     @Override
     public com.pnc.marketplace.model.stripe.Subscription getCustomerByEmail(String email) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCustomerByEmail'");
+        
+        Subscription subscription = this.subscriptionRepo.findByEmail(email);
+
+        if(subscription!=null)
+            return subscription;
+        
+        log.info("No Customer Subscription found with given email: {}",email);
+        return null;
     }
 
     @Override
@@ -137,8 +143,8 @@ public class SubscriptionSerivceImp implements SubscriptionService{
     @Override
     public com.pnc.marketplace.model.stripe.Subscription updateSubscription(
             com.pnc.marketplace.model.stripe.Subscription subscription) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateSubscription'");
+                log.info("Updating the subscription data");
+                return this.subscriptionRepo.save(subscription);
     }
 
     @Override
