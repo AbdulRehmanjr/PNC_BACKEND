@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.pnc.marketplace.database.SellerRequestRepository;
+import com.pnc.marketplace.database.seller.SellerRequestRepository;
 import com.pnc.marketplace.model.seller.BusinessCategory;
 import com.pnc.marketplace.model.seller.Seller;
 import com.pnc.marketplace.model.seller.SellerRequest;

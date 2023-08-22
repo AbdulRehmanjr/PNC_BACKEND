@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.pnc.marketplace.database.BusinessCategoryRepository;
+import com.pnc.marketplace.database.seller.BusinessCategoryRepository;
 import com.pnc.marketplace.model.seller.BusinessCategory;
 import com.pnc.marketplace.service.firebase.FireBaseService;
 import com.pnc.marketplace.service.seller.BusinessCategoryService;

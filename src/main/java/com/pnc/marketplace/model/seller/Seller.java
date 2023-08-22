@@ -38,6 +38,8 @@ public class Seller {
 
     private Boolean isActive = false;
 
+    private String sellerType = "NONE";
+
     public int getSellerId() {
         return sellerId;
     }
@@ -115,6 +117,14 @@ public class Seller {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public String getSellerType() {
+        return sellerType;
+    }
+
+    public void setSellerType(String sellerType) {
+        this.sellerType = sellerType;
     }
 
 }

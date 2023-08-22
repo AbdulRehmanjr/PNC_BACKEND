@@ -1,4 +1,4 @@
-package com.pnc.marketplace.database;
+package com.pnc.marketplace.database.join;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

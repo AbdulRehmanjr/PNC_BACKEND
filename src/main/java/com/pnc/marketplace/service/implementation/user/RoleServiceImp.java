@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pnc.marketplace.database.RoleRepository;
+import com.pnc.marketplace.database.user.RoleRepository;
 import com.pnc.marketplace.model.Role;
 import com.pnc.marketplace.service.user.RoleService;
 

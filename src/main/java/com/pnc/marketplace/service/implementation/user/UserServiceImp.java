@@ -8,9 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import com.pnc.marketplace.database.RoleRepository;
-import com.pnc.marketplace.database.UserRepository;
+import com.pnc.marketplace.database.user.RoleRepository;
+import com.pnc.marketplace.database.user.UserRepository;
 import com.pnc.marketplace.model.Role;
 import com.pnc.marketplace.model.User;
 import com.pnc.marketplace.service.firebase.FireBaseService;

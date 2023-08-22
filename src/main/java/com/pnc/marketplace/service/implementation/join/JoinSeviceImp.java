@@ -3,7 +3,7 @@ package com.pnc.marketplace.service.implementation.join;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pnc.marketplace.database.AppJoinRepository;
+import com.pnc.marketplace.database.join.AppJoinRepository;
 import com.pnc.marketplace.model.join.AppJoin;
 import com.pnc.marketplace.service.join.JoinService;
 

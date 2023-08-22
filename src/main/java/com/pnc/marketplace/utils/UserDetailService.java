@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.pnc.marketplace.database.UserRepository;
+import com.pnc.marketplace.database.user.UserRepository;
 import com.pnc.marketplace.model.Role;
 import com.pnc.marketplace.model.User;
 
