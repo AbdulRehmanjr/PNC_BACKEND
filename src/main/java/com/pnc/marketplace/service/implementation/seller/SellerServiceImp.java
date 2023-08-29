@@ -9,10 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.pnc.marketplace.database.seller.SellerRepository;
 import com.pnc.marketplace.model.seller.Seller;
-import com.pnc.marketplace.model.seller.SellerDashboard;
 import com.pnc.marketplace.service.firebase.FireBaseService;
 import com.pnc.marketplace.service.seller.SellerService;
-import com.pnc.marketplace.utils.enums.ProductAllowed;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -138,57 +136,14 @@ public class SellerServiceImp implements SellerService {
     }
 
     @Override
-    public String updatePassword(String email,String password) {
-        
+    public String updatePassword(String email,String password) {       
         Seller response = this.sellerRepo.findByEmail(email);
-
         if(response!=null){
-            
-            response.setPassword(this.passwordEncoder.encode(password));
+            response.setPassword(this.passwordEncoder.encode(password));    
             response = this.sellerRepo.save(response);
-
             return "Password saved";
         }
-
         log.error("Error in updating the password");
-        return null;
-
-    }
-
-    @Override
-    public Seller addSubscription(String productName, String email, long amount) {
-        
-        Seller seller = this.sellerRepo.findByEmail(email);
-
-        SellerDashboard udash = new SellerDashboard();
-        if(response!=null){
-            log.info("Setting user dashboad info");
-            udash.setEmail(response.getEmail());
-            udash.setSellerType(response.getSellerType());
-            udash.setJobs(response.getJobs());
-            udash.setRevenue(response.getRevenue());
-            udash.setUserId(response.getUserId());
-        }
-        if (productName.equals("STALL")) {
-            
-            seller.setMaxProducts(ProductAllowed.valueOf("STARTERSTALL").getValue());
-            
-            
-        } else if (productName.equals("BAZAAR")) {
-            
-            // seller.setMaxJobs(JobNumber.valueOf("SPRINKLE").getValue());
-            // dash.setSprinkle(1);
-            // dash.setIncome(amount / 100.0);
-            // udash.setSellerType("SPRINKLE");
-        } else if (productName.equals("ELITE")) {
-            
-            // seller.setMaxJobs(JobNumber.valueOf("RAINMAKER").getValue());
-            // dash.setRainmaker(1);
-            // dash.setIncome(amount / 100.0);   
-            // udash.setSellerType("RAINMAKER");
-        }   
-
-        
         return null;
     }
 

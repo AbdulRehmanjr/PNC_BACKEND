@@ -16,7 +16,7 @@ public class SellerDashboard {
 
     private String sellerType;
 
-    private String userId;
+    private int userId;
 
     private int jobs=0;
 
@@ -46,11 +46,11 @@ public class SellerDashboard {
         this.sellerType = sellerType;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

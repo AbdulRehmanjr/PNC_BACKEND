@@ -42,6 +42,8 @@ public class Seller {
 
     private int maxProducts=0;
 
+    private int currentProducts=0;
+
     public int getSellerId() {
         return sellerId;
     }
@@ -129,6 +131,14 @@ public class Seller {
 
     public void setMaxProducts(int maxProducts) {
         this.maxProducts = maxProducts;
+    }
+
+    public int getCurrentProducts() {
+        return currentProducts;
+    }
+
+    public void setCurrentProducts(int currentProducts) {
+        this.currentProducts = currentProducts;
     }
 
 

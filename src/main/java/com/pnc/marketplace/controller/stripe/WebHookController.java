@@ -1,7 +1,6 @@
 package com.pnc.marketplace.controller.stripe;
 
 import java.time.LocalDate;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,16 +16,13 @@ import com.pnc.marketplace.service.stripe.SubscriptionService;
 import com.stripe.Stripe;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Account.Settings.Dashboard;
 import com.stripe.model.Customer;
 import com.stripe.model.Event;
 import com.stripe.model.EventDataObjectDeserializer;
-import com.stripe.model.PaymentIntent;
 import com.stripe.model.Price;
 import com.stripe.model.Product;
 import com.stripe.model.StripeObject;
 import com.stripe.model.Subscription;
-import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
 
 import jakarta.annotation.PostConstruct;
@@ -37,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/webhook")
 public class WebHookController {
 
-    
     
     @Value("${stripe.secert}")
     private String STRIPEAPI;
@@ -52,6 +47,8 @@ public class WebHookController {
 
     @Autowired
     private SubscriptionService subscriptionService;
+
+
 
     @PostMapping("/events")
     public ResponseEntity<?> handleWebhookEvent(@RequestBody String payload,
@@ -86,10 +83,9 @@ public class WebHookController {
 
                         email = customer.getEmail();
 
-                        log.info("Product Name ==> {}",product.getName());
-                        // this.sellerService.addSubscription(card, email, price.getUnitAmount());
+                        this.subscriptionService.addSubscription(product.getName(), email, price.getUnitAmount());
 
-                        // this.subService.addCustomer(email, customerId, subscriptionId, discountId);
+                        this.subscriptionService.addCustomer(email, customerId, subscriptionId);
 
                     } catch (StripeException e) {
                         log.error("ERROR: {} MESSAGE: {}", e.getCause(), e.getMessage());

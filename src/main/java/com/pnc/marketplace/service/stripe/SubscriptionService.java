@@ -1,5 +1,6 @@
 package com.pnc.marketplace.service.stripe;
 
+import com.pnc.marketplace.model.seller.Seller;
 import com.pnc.marketplace.model.stripe.Subscription;
 import com.stripe.model.Customer;
 
@@ -17,8 +18,18 @@ public interface SubscriptionService {
      */
     String paymentCheckout(String type,String email);
 
-    //String projectPayment(Order order);
-
+        /**
+     * The addSubscription function adds a subscription for a product to a seller's account using the
+     * provided email and amount.
+     * 
+     * @param productName The name of the product for which the subscription is being added.
+     * @param email The email parameter is a string that represents the email address of the customer
+     * who wants to subscribe to the product.
+     * @param amount The amount parameter represents the cost or price of the subscription.
+     * @return The method addSubscription is returning a Subscription object.
+     */
+    Seller addSubscription(String productName,String email,long amount);
+    
     /**
      * The function "updateSubscription" takes an email as input and returns a string.
      * 
@@ -46,12 +57,9 @@ public interface SubscriptionService {
      * @param customerId The unique identifier for the customer.
      * @param SubscrptionId The ID of the subscription that the customer wants to add. This could be a
      * unique identifier for a specific subscription plan or package.
-     * @param DiscountId The DiscountId parameter is used to specify the discount that should be
-     * applied to the subscription. It is an identifier that uniquely identifies a specific discount in
-     * the system.
      * @return The addCustomer method is returning a Subscription object.
      */
-    Subscription addCustomer(String email,String customerId,String SubscrptionId,String DiscountId);
+    Subscription addCustomer(String email,String customerId,String SubscrptionId);
 
     /**
      * The function "getCustomerByEmail" retrieves a subscription object based on the customer's email.

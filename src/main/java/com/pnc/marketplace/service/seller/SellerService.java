@@ -60,16 +60,5 @@ public interface SellerService {
      */
     String updatePassword(String email,String password);
 
-   
-    /**
-     * The addSubscription function adds a subscription for a product to a seller's account using the
-     * provided email and amount.
-     * 
-     * @param productName The name of the product for which the subscription is being added.
-     * @param email The email parameter is a string that represents the email address of the customer
-     * who wants to subscribe to the product.
-     * @param amount The amount parameter represents the cost or price of the subscription.
-     * @return The method addSubscription is returning a Subscription object.
-     */
-    Seller addSubscription(String productName,String email,long amount);
+
 }
