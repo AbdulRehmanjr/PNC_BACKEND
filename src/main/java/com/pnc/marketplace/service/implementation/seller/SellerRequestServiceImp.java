@@ -142,9 +142,10 @@ public class SellerRequestServiceImp implements SellerRequestService {
         return null;
     }
 
-    // The `@Override` annotation is used to indicate that the method
-    // `acceptRequest` is overriding a
-    // method from its superclass or implementing an interface method.
+
+    // The `@Override` annotation is used to indicate that the method is overriding a method from its
+    // superclass or implementing an interface method. In this case, the `acceptRequest` method is
+    // overriding a method from the `SellerRequestService` interface.
     @Override
     public SellerRequest acceptRequest(int sellerId) {
 
@@ -182,7 +183,6 @@ public class SellerRequestServiceImp implements SellerRequestService {
 
             BusinessCategory category = this.bcService.getCategoryByName(response.getCategory());
 
-            seller.setPassword("NONE");
             seller.setCategory(category);
 
             try {

@@ -1,5 +1,7 @@
 package com.pnc.marketplace.controller.seller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,6 +70,14 @@ public class SellerController {
     }
 
     
+    /**
+     * This function retrieves a seller by their ID and returns a response entity with the seller
+     * information if found, or an error message if not found.
+     * 
+     * @param sellerId The sellerId is a path variable that represents the unique identifier of a
+     * seller. It is used to retrieve the seller information from the database.
+     * @return The method is returning a ResponseEntity object.
+     */
     @GetMapping("/{sellerId}")
     ResponseEntity<?> findSellerById(@PathVariable int sellerId) {
 
@@ -80,7 +90,31 @@ public class SellerController {
         return ResponseEntity.status(404).body(null);
     }
 
+    /**
+     * This function returns a list of all sellers and handles error cases.
+     * 
+     * @return The method is returning a ResponseEntity object.
+     */
+    @GetMapping("/all")
+    ResponseEntity<?> findAllSellers() {
+
+        List<Seller> response = this.sellerService.getAllSellers();
+
+        if (response != null)
+            return ResponseEntity.status(201).body(response);
+
+        log.error("Error in fetching Seller.");
+        return ResponseEntity.status(404).body(null);
+    }
    
+    /**
+     * This Java function retrieves a seller by their email and returns a ResponseEntity with the
+     * seller if found, or an error message if not found.
+     * 
+     * @param email The email parameter is a path variable that represents the email address of a
+     * seller.
+     * @return The method is returning a ResponseEntity object.
+     */
     @GetMapping("/email/{email}")
     ResponseEntity<?> findByEmail(@PathVariable String email) {
 
@@ -93,6 +127,14 @@ public class SellerController {
         return ResponseEntity.status(404).body(null);
     }   
 
+    /**
+     * This function updates the password for a seller with the given email.
+     * 
+     * @param email The email parameter is a path variable that represents the email address of the
+     * user whose password needs to be updated.
+     * @param password The password parameter is the new password that the user wants to update.
+     * @return The method is returning a ResponseEntity object.
+     */
     @PostMapping("/update-password/{email}")
     ResponseEntity<?> updatePassword(@PathVariable String email,@RequestBody String password){
 

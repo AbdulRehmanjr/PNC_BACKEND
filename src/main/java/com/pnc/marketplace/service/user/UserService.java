@@ -26,6 +26,14 @@ public interface UserService {
      User saveAdmin(User user);
 
      /**
+      * The function "saveSeller" saves a user object representing a seller.
+      * 
+      * @param user The user object represents the user who wants to save a seller.
+      * @return The method `saveSeller` returns a `User` object.
+      */
+     User saveSeller(User user);
+
+     /**
       * The function getUserById returns a User object based on the given userId.
       * 
       * @param userId An integer representing the unique identifier of a user.

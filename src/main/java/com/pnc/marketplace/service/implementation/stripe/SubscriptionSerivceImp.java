@@ -1,7 +1,6 @@
 package com.pnc.marketplace.service.implementation.stripe;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,10 +9,12 @@ import org.springframework.stereotype.Service;
 import com.pnc.marketplace.database.seller.SellerDashboardRepository;
 import com.pnc.marketplace.database.seller.SellerRepository;
 import com.pnc.marketplace.database.stripe.SubscriptionRepository;
+import com.pnc.marketplace.model.User;
 import com.pnc.marketplace.model.seller.Seller;
 import com.pnc.marketplace.model.seller.SellerDashboard;
 import com.pnc.marketplace.model.stripe.Subscription;
 import com.pnc.marketplace.service.stripe.SubscriptionService;
+import com.pnc.marketplace.service.user.UserService;
 import com.pnc.marketplace.utils.StripeUtils;
 import com.pnc.marketplace.utils.enums.ProductAllowed;
 import com.stripe.Stripe;
@@ -52,6 +53,9 @@ public class SubscriptionSerivceImp implements SubscriptionService {
     @Autowired
     private SellerDashboardRepository sdRepo;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public String paymentCheckout(String type, String email) {
 
@@ -79,6 +83,9 @@ public class SubscriptionSerivceImp implements SubscriptionService {
                         selectedSubscription = ProductAllowed.valueOf(type.toUpperCase());
                     break;
                 case EMPORIUMELITE:
+                    selectedSubscription = ProductAllowed.valueOf(type.toUpperCase());
+                    break;
+                default:
                     return null;
             }
         }
@@ -215,7 +222,10 @@ public class SubscriptionSerivceImp implements SubscriptionService {
 
         SellerDashboard sellerDashboard = this.sdRepo.findByEmail(email);
         
-    
+        if(sellerDashboard == null)
+            sellerDashboard = new SellerDashboard();
+        
+
         sellerDashboard.setUserId(response.getSellerId());
         sellerDashboard.setEmail(response.getEmail());
         sellerDashboard.setSellerType(response.getSellerType());
@@ -236,11 +246,23 @@ public class SubscriptionSerivceImp implements SubscriptionService {
             response.setSellerType("EMPORIUMELITE");
             response.setMaxProducts(ProductAllowed.valueOf("EMPORIUMELITE").getValue());
         }
-        //* Seller and Dashboard modification
+
+        //* Seller , Dashboard modification and adding user credentials
+
         response.setIsActive(true);
         this.sellerRepository.save(response);
         this.sdRepo.save(sellerDashboard);
 
-        return null;
+        User user = new User();
+
+        user.setFirstName(response.getFirstName());
+        user.setLastName(response.getLastName());
+        user.setPhotoUri(response.getPicture());
+        user.setUserEmail(response.getEmail());
+        user.setUserPassword(response.getFirstName()+response.getLastName());
+        log.info("=========> paswword {}",user.getUserPassword());
+        this.userService.saveSeller(user);
+
+        return response;
     }
 }

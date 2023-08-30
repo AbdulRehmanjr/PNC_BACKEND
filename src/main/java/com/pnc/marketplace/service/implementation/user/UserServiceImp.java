@@ -12,6 +12,7 @@ import com.pnc.marketplace.database.user.RoleRepository;
 import com.pnc.marketplace.database.user.UserRepository;
 import com.pnc.marketplace.model.Role;
 import com.pnc.marketplace.model.User;
+import com.pnc.marketplace.model.seller.Seller;
 import com.pnc.marketplace.service.firebase.FireBaseService;
 import com.pnc.marketplace.service.user.UserService;
 
@@ -21,8 +22,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class UserServiceImp implements UserService {
 
-    final String DEFAULT_USER = "USER";
-    final String ADMIN = "ADMIN";
+    private final String DEFAULT_USER = "USER";
+    private final String ADMIN = "ADMIN";
+
+    private final String SELLER = "SELLER";
 
     @Autowired
     private UserRepository userRepo;
@@ -69,6 +72,39 @@ public class UserServiceImp implements UserService {
             return null;
             
         return response;
+    }
+
+
+    
+    /**
+     * This function saves a new seller user in the database with an admin role.
+     * 
+     * @param user The user object represents the seller that needs to be saved in the database. It
+     * contains information such as the user's username, password, and other details.
+     * @return The method is returning a User object.
+     */
+    @Override
+    public User saveSeller(User user) {
+
+        log.info("inserting new seller in database");
+        Role role = this.roleRepo.findByRoleName(SELLER);
+
+        if (role == null) {
+            log.info("No role found with given name {}", SELLER);
+            return null;
+        }
+
+        user.setRole(role);
+        user.setUserPassword(encoder.encode(user.getUserPassword()));
+        User saved = null;
+
+        try {
+            saved = this.userRepo.save(user);
+            return saved;
+        } catch (Exception e) {
+            log.error("Error cause: {}, Message: {}", e.getCause(), e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -231,5 +267,6 @@ public class UserServiceImp implements UserService {
         user.setUserPassword(encoder.encode(user.getUserPassword()));
         return this.userRepo.save(user);
     }
+
 
 }
