@@ -1,4 +1,4 @@
-package com.pnc.marketplace.service.implementation.user;
+package com.pnc.marketplace.implementation.user;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,7 +12,6 @@ import com.pnc.marketplace.database.user.RoleRepository;
 import com.pnc.marketplace.database.user.UserRepository;
 import com.pnc.marketplace.model.Role;
 import com.pnc.marketplace.model.User;
-import com.pnc.marketplace.model.seller.Seller;
 import com.pnc.marketplace.service.firebase.FireBaseService;
 import com.pnc.marketplace.service.user.UserService;
 

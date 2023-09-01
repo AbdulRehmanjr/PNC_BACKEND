@@ -38,12 +38,11 @@ public class SecurityConfig  {
 
         private String[] origins = { "http://localhost:4200" };
 
-        private final String[] PUBLICURI= {"/user/**","/token/**","/webhook/**","/category/**","/checkout/**","/seller/**","/sellerrequest/**"};
+        private final String[] PUBLICURI= {"/user/**","/token/**","/product/**","/webhook/**","/category/**","/checkout/**","/seller/**","/sellerrequest/**"};
 
         @Bean
         AuthenticationProvider authenticationProvider() {
                 DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
-
                 dao.setUserDetailsService(this.userDetailService);
                 dao.setPasswordEncoder(this.encoder());
                 return dao;

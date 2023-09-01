@@ -1,4 +1,4 @@
-package com.pnc.marketplace.service.implementation.stripe;
+package com.pnc.marketplace.implementation.stripe;
 
 import java.time.LocalDate;
 

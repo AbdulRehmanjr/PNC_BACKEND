@@ -1,4 +1,4 @@
-package com.pnc.marketplace.service.implementation.seller;
+package com.pnc.marketplace.implementation.seller;
 
 import java.io.IOException;
 import java.util.List;
