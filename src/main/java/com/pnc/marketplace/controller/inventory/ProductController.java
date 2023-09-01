@@ -1,5 +1,7 @@
 package com.pnc.marketplace.controller.inventory;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,9 @@ import com.pnc.marketplace.model.Inventory.Product;
 import com.pnc.marketplace.service.inventory.ProductService;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 @Slf4j
@@ -33,9 +38,10 @@ public class ProductController {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
+            log.info("Product : {}",productStr);
             product = objectMapper.readValue(productStr,Product.class);
         } catch (JsonProcessingException e) {
-          log.error("Error in converting string in Json Object");
+          log.error("Error : {}",e.getMessage());
           return null;
         }
 
@@ -44,5 +50,18 @@ public class ProductController {
         if(product!=null)
             return ResponseEntity.status(201).body(product);
         return ResponseEntity.status(404).body(null);
-    }   
+    }  
+    
+    @GetMapping(value="/seller/{sellerId}")
+    public ResponseEntity<?> getAllProductsBySeller(@PathVariable int sellerId) {
+
+        List<Product> products = this.productService.getProductsBySeller(sellerId);
+
+        if(products != null)
+            return ResponseEntity.status(201).body(products);
+        
+        log.error("Can't Find any product by seller {}",sellerId);
+        return null;
+    }
+    
 }

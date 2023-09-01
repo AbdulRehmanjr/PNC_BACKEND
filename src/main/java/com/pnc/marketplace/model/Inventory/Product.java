@@ -5,6 +5,7 @@ import java.util.List;
 import com.pnc.marketplace.model.seller.BusinessCategory;
 import com.pnc.marketplace.model.seller.Seller;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +30,7 @@ public class Product {
 
     private String description;
 
+    @Column(length = 1000)
     private List<String> images;
 
     private double price;
@@ -36,6 +38,8 @@ public class Product {
     private int quantity;
 
     private int rating=0;
+
+    private String inventoryStatus;
 
     @ManyToOne
     private BusinessCategory category;

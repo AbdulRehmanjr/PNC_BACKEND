@@ -134,17 +134,4 @@ public class SellerServiceImp implements SellerService {
         log.error("Error in Sellers list");
         return response;
     }
-
-    @Override
-    public String updatePassword(String email,String password) {       
-        Seller response = this.sellerRepo.findByEmail(email);
-        if(response!=null){
-            response.setPassword(this.passwordEncoder.encode(password));    
-            response = this.sellerRepo.save(response);
-            return "Password saved";
-        }
-        log.error("Error in updating the password");
-        return null;
-    }
-
 }

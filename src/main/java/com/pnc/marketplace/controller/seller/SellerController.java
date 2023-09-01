@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -126,26 +125,5 @@ public class SellerController {
         log.error("Error in fetching seller");
         return ResponseEntity.status(404).body(null);
     }   
-
-    /**
-     * This function updates the password for a seller with the given email.
-     * 
-     * @param email The email parameter is a path variable that represents the email address of the
-     * user whose password needs to be updated.
-     * @param password The password parameter is the new password that the user wants to update.
-     * @return The method is returning a ResponseEntity object.
-     */
-    @PostMapping("/update-password/{email}")
-    ResponseEntity<?> updatePassword(@PathVariable String email,@RequestBody String password){
-
-        String response = this.sellerService.updatePassword(email, password);
-
-        if(response==null)
-            return ResponseEntity.status(404).body("Error in updating password");
-        
-        return ResponseEntity.status(201).body(response);
-    
-    }
-
 
 }

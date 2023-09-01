@@ -43,21 +43,21 @@ public class ProductServiceImp  implements ProductService{
 
         Seller seller = this.sellerService.getSellerById(product.getSeller().getSellerId());
         BusinessCategory category = this.businessCategoryService.getCategoryById(product.getCategory().getCategoryId());
-
         
         if(seller==null)
             return null;
         
         List<String> urls = new ArrayList<>();
         
-        for(MultipartFile picture :pictures){
+        
             try {
-                urls.add(this.fireBaseService.saveFile(product.getName()+product.getSeller().getSellerId()+Math.random(), picture.getInputStream(), picture.getContentType()));
+                urls.add(this.fireBaseService.saveFile(pictures[0].getName()+product.getSeller().getSellerId()+Math.random(), pictures[0].getInputStream(), pictures[0].getContentType()));
+                urls.add(this.fireBaseService.saveFile(pictures[1].getName()+product.getSeller().getSellerId()+Math.random(), pictures[1].getInputStream(), pictures[1].getContentType()));
             } catch (IOException e) {
                 log.error("Error in Reading Input Stream");
             }
-        }   
-
+        
+        log.info("URLS : {}",urls);
         product.setImages(urls);
         product.setSeller(seller);
         product.setCode(this.generateProductCode(6));
@@ -65,9 +65,14 @@ public class ProductServiceImp  implements ProductService{
 
         product = this.productRepository.save(product);
 
-        if(product!=null)
-            return product;
+        seller.setCurrentProducts(seller.getCurrentProducts()+1);
+        this.sellerService.saveSeller(seller);
         
+        if(product!=null){
+            log.info("Produc Saved");
+            return product;
+        }
+            
         log.error("Error in saving product");
         return null;
     }
@@ -86,8 +91,12 @@ public class ProductServiceImp  implements ProductService{
 
     @Override
     public List<Product> getProductsBySeller(int sellerId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProductsBySeller'");
+       
+        List<Product> products = this.productRepository.findBySellerSellerId(sellerId);
+
+        if(products.isEmpty())
+            return null;
+        return products;
     }
 
     @Override

@@ -180,6 +180,7 @@ public class SellerRequestServiceImp implements SellerRequestService {
             seller.setAddress(response.getAddress());
             seller.setPicture(response.getPicture());
             seller.setEmail(response.getEmail());
+            seller.setPhone(response.getPhone());
 
             BusinessCategory category = this.bcService.getCategoryByName(response.getCategory());
 

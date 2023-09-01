@@ -1,8 +1,10 @@
 package com.pnc.marketplace.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.pnc.marketplace.model.communication.ChatUserList;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 
 @Entity
@@ -33,6 +36,10 @@ public class User {
 
     @ManyToOne
     private Role role;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "users")
+    private ChatUserList chatUserList;
 
     public int getUserId() {
         return userId;
