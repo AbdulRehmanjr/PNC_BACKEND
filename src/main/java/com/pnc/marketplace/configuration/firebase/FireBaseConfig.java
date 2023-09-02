@@ -34,6 +34,5 @@ public class FireBaseConfig {
                 } catch (Exception e) {
                     log.error("Error {}",e.getMessage());
                 }
-        
     }
 }
