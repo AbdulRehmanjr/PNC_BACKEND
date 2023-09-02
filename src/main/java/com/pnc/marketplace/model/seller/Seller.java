@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pnc.marketplace.model.Inventory.Product;
-import com.pnc.marketplace.model.communication.ChatUserList;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -54,10 +52,5 @@ public class Seller {
     @JsonIgnore
     @OneToMany(mappedBy = "seller")
     private List<Product> products;
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "seller")
-    private ChatUserList chatUserList;
-
     
 }

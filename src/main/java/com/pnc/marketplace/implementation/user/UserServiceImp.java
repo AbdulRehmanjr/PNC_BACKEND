@@ -38,6 +38,7 @@ public class UserServiceImp implements UserService {
     @Autowired
     private FireBaseService fbService;
 
+
     /**
      * This function saves a new user in the database with a default role and
      * encoded password.
@@ -46,7 +47,7 @@ public class UserServiceImp implements UserService {
      * @return The method is returning the saved User object.
      */
     @Override
-    public User saveUser(User user,MultipartFile photo) {
+    public User saveUser(User user, MultipartFile photo) {
 
         Role role = this.roleRepo.findByRoleName(DEFAULT_USER);
 
@@ -59,27 +60,28 @@ public class UserServiceImp implements UserService {
         user.setUserPassword(encoder.encode(user.getUserPassword()));
 
         try {
-            user.setPhotoUri(this.fbService.saveFile(user.getFirstName().trim()+"-image", photo.getInputStream(), photo.getContentType()));
+            user.setPhotoUri(this.fbService.saveFile(user.getFirstName().trim() + "-image", photo.getInputStream(),
+                    photo.getContentType()));
         } catch (IOException e) {
-            log.error("Can't save Image Error {}",e.getCause());
+            log.error("Can't save Image Error {}", e.getCause());
             user.setPhotoUri("assets/placeholder.png");
         }
-        
+
         User response = this.userRepo.save(user);
 
-        if(response == null)
+        if (response == null)
             return null;
-            
+
         return response;
     }
 
-
-    
     /**
      * This function saves a new seller user in the database with an admin role.
      * 
-     * @param user The user object represents the seller that needs to be saved in the database. It
-     * contains information such as the user's username, password, and other details.
+     * @param user The user object represents the seller that needs to be saved in
+     *             the database. It
+     *             contains information such as the user's username, password, and
+     *             other details.
      * @return The method is returning a User object.
      */
     @Override
@@ -99,6 +101,7 @@ public class UserServiceImp implements UserService {
 
         try {
             saved = this.userRepo.save(user);
+
             return saved;
         } catch (Exception e) {
             log.error("Error cause: {}, Message: {}", e.getCause(), e.getMessage());
@@ -266,6 +269,5 @@ public class UserServiceImp implements UserService {
         user.setUserPassword(encoder.encode(user.getUserPassword()));
         return this.userRepo.save(user);
     }
-
 
 }
