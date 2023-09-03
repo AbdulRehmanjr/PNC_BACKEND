@@ -1,5 +1,7 @@
 package com.pnc.marketplace.controller.communication;
 
+import java.io.Console;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -49,6 +51,7 @@ public class SocketController {
     private Message receivedPrivateMessage(@Payload Message message) {
 
         try {
+            log.info("Message: {}",message.toString());
             this.messageService.saveMessages(message);
             message.setType("RECEIVER");
 

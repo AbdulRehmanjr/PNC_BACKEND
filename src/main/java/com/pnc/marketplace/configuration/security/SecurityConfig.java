@@ -26,7 +26,7 @@ import com.pnc.marketplace.utils.UserDetailService;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig  {
+public class SecurityConfig {
 
         @Autowired
         private JwtAuthenticationEntryPoint unauthorizedHandler;
@@ -39,13 +39,17 @@ public class SecurityConfig  {
 
         private String[] origins = { "http://localhost:4200" };
 
-        private final String[] PUBLICURI= {"/user/**","/message/**","/chatlist/**","/token/**","/product/**","/webhook/**","/category/**","/checkout/**","/seller/**","/sellerrequest/**"};
+        private final String[] PUBLICURI = { "/ws/**","/socket.io/**", "/user/**", "/message/**", "/chatlist/**", "/token/**",
+                        "/product/**", "/webhook/**", "/category/**", "/checkout/**", "/seller/**",
+                        "/sellerrequest/**" };
 
         /**
-         * The function returns an instance of an AuthenticationProvider with a configured
+         * The function returns an instance of an AuthenticationProvider with a
+         * configured
          * UserDetailsService and PasswordEncoder.
          * 
-         * @return The method is returning an instance of the AuthenticationProvider interface.
+         * @return The method is returning an instance of the AuthenticationProvider
+         *         interface.
          */
         @Bean
         AuthenticationProvider authenticationProvider() {
@@ -58,9 +62,11 @@ public class SecurityConfig  {
         /**
          * The function returns an instance of the AuthenticationManager interface.
          * 
-         * @param config The `config` parameter is an instance of `AuthenticationConfiguration`. It is
-         * used to configure and create an `AuthenticationManager` bean.
-         * @return The method is returning an instance of the AuthenticationManager interface.
+         * @param config The `config` parameter is an instance of
+         *               `AuthenticationConfiguration`. It is
+         *               used to configure and create an `AuthenticationManager` bean.
+         * @return The method is returning an instance of the AuthenticationManager
+         *         interface.
          */
         @Bean
         AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -68,38 +74,40 @@ public class SecurityConfig  {
                 return config.getAuthenticationManager();
         }
 
-       /**
-        * The function returns a BCryptPasswordEncoder object with a strength of 13.
-        * 
-        * @return The method is returning an instance of the BCryptPasswordEncoder class, which is a
-        * PasswordEncoder implementation that uses the BCrypt hashing algorithm with a strength factor
-        * of 13.
-        */
+        /**
+         * The function returns a BCryptPasswordEncoder object with a strength of 13.
+         * 
+         * @return The method is returning an instance of the BCryptPasswordEncoder
+         *         class, which is a
+         *         PasswordEncoder implementation that uses the BCrypt hashing algorithm
+         *         with a strength factor
+         *         of 13.
+         */
         @Bean
         PasswordEncoder encoder() {
                 return new BCryptPasswordEncoder(13);
         }
 
         /**
-         * This function configures the security filter chain for a Java application, specifying
+         * This function configures the security filter chain for a Java application,
+         * specifying
          * authorization rules and adding a JWT authentication filter.
          * 
-         * @param http The `http` parameter is an instance of `HttpSecurity`, which is used to
-         * configure the security settings for the application.
+         * @param http The `http` parameter is an instance of `HttpSecurity`, which is
+         *             used to
+         *             configure the security settings for the application.
          * @return The method is returning a SecurityFilterChain object.
          */
         @Bean
         SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
                 http
-                .csrf((csrf)-> csrf.disable())
-                .cors((cor)-> cor.configurationSource(this.corsConfigurationSource()))
+                                .csrf((csrf) -> csrf.disable())
+                                .cors((cor) -> cor.configurationSource(this.corsConfigurationSource()))
                                 .authorizeHttpRequests((req) -> req
                                                 .requestMatchers(PUBLICURI).permitAll()
                                                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                                                .anyRequest().authenticated()
-                                                                                      
-                                                )
+                                                .anyRequest().authenticated())
                                 .exceptionHandling(
                                                 (exception) -> exception.authenticationEntryPoint(unauthorizedHandler))
                                 .sessionManagement((session) -> session
@@ -109,22 +117,28 @@ public class SecurityConfig  {
                 return http.build();
         }
 
-       /**
-        * This function sets up CORS configuration for a Java application, allowing specified origins,
-        * methods, headers, and credentials.
-        * 
-        * @return The method is returning a CorsConfigurationSource object.
-        */
+        /**
+         * This function sets up CORS configuration for a Java application, allowing
+         * specified origins,
+         * methods, headers, and credentials.
+         * 
+         * @return The method is returning a CorsConfigurationSource object.
+         */
         @Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		   CorsConfiguration configuration = new CorsConfiguration();
+        CorsConfigurationSource corsConfigurationSource() {
+                CorsConfiguration configuration = new CorsConfiguration();
+
+                // Allow all origins (change this in production!)
                 configuration.setAllowedOrigins(Arrays.asList(origins));
-                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE","PATCH"));
+                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
                 configuration.setAllowedHeaders(Arrays.asList("*"));
                 configuration.setAllowCredentials(true);
-                configuration.setExposedHeaders(Arrays.asList("x-Auth-Token", "Access-Control-Allow-Origin"));
+                configuration.setExposedHeaders(
+                                Arrays.asList("x-Auth-Token", "Access-Control-Allow-Origin", "Authorization"));
+
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
                 source.registerCorsConfiguration("/**", configuration);
                 return source;
         }
+
 }
