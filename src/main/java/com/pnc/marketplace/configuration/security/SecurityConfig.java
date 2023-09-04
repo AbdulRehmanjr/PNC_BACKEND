@@ -39,7 +39,7 @@ public class SecurityConfig {
 
         private String[] origins = { "http://localhost:4200" };
 
-        private final String[] PUBLICURI = { "/ws/**","/socket.io/**", "/user/**", "/message/**", "/chatlist/**", "/token/**",
+        private final String[] PUBLICURI = { "/ws/**","/cart/**", "/user/**", "/message/**", "/chatlist/**", "/token/**",
                         "/product/**", "/webhook/**", "/category/**", "/checkout/**", "/seller/**",
                         "/sellerrequest/**" };
 

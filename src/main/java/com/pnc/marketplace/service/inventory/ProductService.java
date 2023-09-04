@@ -53,6 +53,15 @@ public interface ProductService {
     List<Product> getProductsByCategory(int categoryId);
 
     /**
+     * The function returns a list of products based on the given category name.
+     * 
+     * @param categoryName A string representing the name of the category for which you want to
+     * retrieve the products.
+     * @return The method is returning a list of products that belong to the specified category name.
+     */
+    List<Product> getProductByCategoryName(String categoryName);
+
+    /**
      * The function updateProduct takes a Product object as input and returns a modified version of the
      * same Product object.
      * 
@@ -62,6 +71,11 @@ public interface ProductService {
      */
     Product updateProduct(Product product);
 
+    /**
+     * The deleteProduct function is used to remove a product from a system.
+     * 
+     * @param product The product parameter is of type Product, which represents a product object.
+     */
     void deleteProduct(Product product);
     
 }

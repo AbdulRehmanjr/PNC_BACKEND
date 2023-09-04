@@ -22,42 +22,43 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ProductServiceImp  implements ProductService{
-
+public class ProductServiceImp implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
-    
+
     @Autowired
     private FireBaseService fireBaseService;
 
     @Autowired
     private SellerService sellerService;
-    
+
     @Autowired
     private BusinessCategoryService businessCategoryService;
-
 
     @Override
     public Product saveProduct(MultipartFile[] pictures, Product product) {
 
         Seller seller = this.sellerService.getSellerById(product.getSeller().getSellerId());
         BusinessCategory category = this.businessCategoryService.getCategoryById(product.getCategory().getCategoryId());
-        
-        if(seller==null)
+
+        if (seller == null)
             return null;
-        
+
         List<String> urls = new ArrayList<>();
-        
-        
-            try {
-                urls.add(this.fireBaseService.saveFile(pictures[0].getName()+product.getSeller().getSellerId()+Math.random(), pictures[0].getInputStream(), pictures[0].getContentType()));
-                urls.add(this.fireBaseService.saveFile(pictures[1].getName()+product.getSeller().getSellerId()+Math.random(), pictures[1].getInputStream(), pictures[1].getContentType()));
-            } catch (IOException e) {
-                log.error("Error in Reading Input Stream");
-            }
-        
-        log.info("URLS : {}",urls);
+
+        try {
+            urls.add(this.fireBaseService.saveFile(
+                    pictures[0].getName() + product.getSeller().getSellerId() + Math.random(),
+                    pictures[0].getInputStream(), pictures[0].getContentType()));
+            urls.add(this.fireBaseService.saveFile(
+                    pictures[1].getName() + product.getSeller().getSellerId() + Math.random(),
+                    pictures[1].getInputStream(), pictures[1].getContentType()));
+        } catch (IOException e) {
+            log.error("Error in Reading Input Stream");
+        }
+
+        log.info("URLS : {}", urls);
         product.setImages(urls);
         product.setSeller(seller);
         product.setCode(this.generateProductCode(6));
@@ -65,14 +66,14 @@ public class ProductServiceImp  implements ProductService{
 
         product = this.productRepository.save(product);
 
-        seller.setCurrentProducts(seller.getCurrentProducts()+1);
+        seller.setCurrentProducts(seller.getCurrentProducts() + 1);
         this.sellerService.saveSeller(seller);
-        
-        if(product!=null){
+
+        if (product != null) {
             log.info("Produc Saved");
             return product;
         }
-            
+
         log.error("Error in saving product");
         return null;
     }
@@ -91,11 +92,25 @@ public class ProductServiceImp  implements ProductService{
 
     @Override
     public List<Product> getProductsBySeller(int sellerId) {
-       
+
         List<Product> products = this.productRepository.findBySellerSellerId(sellerId);
 
-        if(products.isEmpty())
+        if (products.isEmpty())
             return null;
+        return products;
+    }
+
+    @Override
+    public List<Product> getProductByCategoryName(String categoryName) {
+
+        List<Product> products = this.productRepository.findAllByCategoryCategoryName(categoryName);
+        try {
+            if (products.isEmpty())
+                return null;
+        } catch (Exception e) {
+            return null;
+        }
+
         return products;
     }
 
@@ -116,7 +131,6 @@ public class ProductServiceImp  implements ProductService{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteProduct'");
     }
-    
 
     private String generateProductCode(int length) {
         final SecureRandom RANDOM = new SecureRandom();
@@ -127,4 +141,5 @@ public class ProductServiceImp  implements ProductService{
         }
         return builder.toString();
     }
+
 }

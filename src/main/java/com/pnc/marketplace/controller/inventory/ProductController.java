@@ -30,6 +30,16 @@ public class ProductController {
     private ProductService productService;
 
     
+    /**
+     * The function saves a product with pictures and returns a response entity with the saved product.
+     * 
+     * @param pictures An array of MultipartFile objects representing the pictures of the product being
+     * saved.
+     * @param productStr The parameter `productStr` is a string representation of a JSON object that
+     * contains the details of a product. It is used to deserialize the JSON object into a `Product`
+     * object using the `ObjectMapper` class.
+     * @return The method is returning a ResponseEntity object.
+     */
     @PostMapping("/save")
     ResponseEntity<?> saveProduct(@RequestParam("pictures") MultipartFile[] pictures, String productStr){
         
@@ -52,6 +62,15 @@ public class ProductController {
         return ResponseEntity.status(404).body(null);
     }  
     
+    /**
+     * This function retrieves all products associated with a specific seller.
+     * 
+     * @param sellerId The sellerId is a path variable that represents the unique identifier of a
+     * seller. It is used to retrieve all the products associated with that seller.
+     * @return The method is returning a ResponseEntity object. If the products list is not null, it
+     * will return a ResponseEntity with a status code of 201 (created) and the products list as the
+     * response body. If the products list is null, it will log an error message and return null.
+     */
     @GetMapping(value="/seller/{sellerId}")
     public ResponseEntity<?> getAllProductsBySeller(@PathVariable int sellerId) {
 
@@ -61,6 +80,28 @@ public class ProductController {
             return ResponseEntity.status(201).body(products);
         
         log.error("Can't Find any product by seller {}",sellerId);
+        return null;
+    }
+
+     /**
+      * The function retrieves all products based on a given category name and returns them in a
+      * ResponseEntity.
+      * 
+      * @param categoryName The categoryName parameter is a String that represents the name of the
+      * category for which we want to retrieve the products.
+      * @return The method is returning a ResponseEntity object. If the products list is not null, it
+      * will return a ResponseEntity with a status code of 201 (created) and the products list as the
+      * response body. If the products list is null, it will log an error message and return null.
+      */
+     @GetMapping(value="/category/{categoryName}")
+    public ResponseEntity<?> getAllProductsByCategoryName(@PathVariable String categoryName) {
+
+        List<Product> products = this.productService.getProductByCategoryName(categoryName);
+
+        if(products != null)
+            return ResponseEntity.status(201).body(products);
+        
+        log.error("Can't Find any product by category {}",categoryName);
         return null;
     }
     
