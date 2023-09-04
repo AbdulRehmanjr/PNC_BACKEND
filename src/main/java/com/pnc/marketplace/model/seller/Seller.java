@@ -3,6 +3,7 @@ package com.pnc.marketplace.model.seller;
 
 import java.util.List;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pnc.marketplace.model.Inventory.Product;
 
@@ -52,5 +53,4 @@ public class Seller {
     @JsonIgnore
     @OneToMany(mappedBy = "seller")
     private List<Product> products;
-    
 }

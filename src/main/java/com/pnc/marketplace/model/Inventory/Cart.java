@@ -1,8 +1,7 @@
 package com.pnc.marketplace.model.Inventory;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,6 +29,17 @@ public class Cart {
     private String userEmail;
 
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "cart")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
     private Set<CartItem> cartItems = new HashSet<>();
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "cart")
+    private Order order;
+
+    private boolean isPaid = false;
+
+    @Override
+    public String toString() {
+        return "Cart [cartId=" + cartId + ", userEmail=" + userEmail + "]";
+    }
 }

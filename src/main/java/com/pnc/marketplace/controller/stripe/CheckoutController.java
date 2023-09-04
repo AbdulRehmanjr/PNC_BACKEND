@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.pnc.marketplace.model.Inventory.Cart;
 import com.pnc.marketplace.model.stripe.SubscriptionPayment;
-import com.pnc.marketplace.service.stripe.SubscriptionService;
+import com.pnc.marketplace.service.stripe.StripeService;
 import com.stripe.Stripe;
 
 import jakarta.annotation.PostConstruct;
@@ -21,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CheckoutController {
 
     @Autowired
-    private SubscriptionService subscriptionService;
+    private StripeService stripeService;
 
     @Value("${stripe.secert}")
     private String STRIPEAPI;
@@ -45,9 +46,9 @@ public class CheckoutController {
     * returns a ResponseEntity with a status of 404 (Not Found) and a null body.
     */
     @PostMapping("/create-checkout-session")
-    public ResponseEntity<?> createCheckoutSession(@RequestBody SubscriptionPayment payment) {
+    ResponseEntity<?> createCheckoutSession(@RequestBody SubscriptionPayment payment) {
 
-        String url = this.subscriptionService.paymentCheckout(payment.getType(), payment.getEmail());
+        String url = this.stripeService.paymentCheckout(payment.getType(), payment.getEmail());
 
         if (url != null) 
             return ResponseEntity.status(201).body(url);
@@ -55,4 +56,17 @@ public class CheckoutController {
         log.error("Error in making stripe url");
         return ResponseEntity.status(404).body(null);
     }
+
+    @PostMapping("/order")
+    ResponseEntity<?> createOrderCheckout(@RequestBody Cart cart){
+
+        String url = this.stripeService.orderPaymentCheckout(cart);
+
+        if (url != null) 
+            return ResponseEntity.status(201).body(url);
+
+        log.error("Error in making stripe url");
+        return ResponseEntity.status(404).body(null);
+    }
+
 }

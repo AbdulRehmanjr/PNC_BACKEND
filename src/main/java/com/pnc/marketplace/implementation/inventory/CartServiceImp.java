@@ -24,12 +24,15 @@ public class CartServiceImp implements CartService {
     private CartItemRepository cartItemRepo;
 
     /**
-     * The function creates a cart for a user, saves it to the database, and associates cart items with
+     * The function creates a cart for a user, saves it to the database, and
+     * associates cart items with
      * the cart.
      * 
-     * @param items An array of CartItem objects representing the items to be added to the cart.
-     * @param userEmail The userEmail parameter is a String that represents the email address of the
-     * user for whom the cart is being created.
+     * @param items     An array of CartItem objects representing the items to be
+     *                  added to the cart.
+     * @param userEmail The userEmail parameter is a String that represents the
+     *                  email address of the
+     *                  user for whom the cart is being created.
      * @return The method is returning a Cart object.
      */
     @Override
@@ -51,11 +54,14 @@ public class CartServiceImp implements CartService {
     }
 
     /**
-     * The function creates a cart for a user, saves it to the database, and also saves the cart items
+     * The function creates a cart for a user, saves it to the database, and also
+     * saves the cart items
      * associated with the cart.
      * 
-     * @param cart The "cart" parameter is an object of type Cart, which represents a shopping cart. It
-     * contains information such as the user's email and a list of cart items.
+     * @param cart The "cart" parameter is an object of type Cart, which represents
+     *             a shopping cart. It
+     *             contains information such as the user's email and a list of cart
+     *             items.
      * @return The method is returning a Cart object.
      */
     @Override
@@ -63,42 +69,73 @@ public class CartServiceImp implements CartService {
         log.info("Saving cart of user : {}", cart.getUserEmail());
 
         try {
-            Cart response = this.cartRepo.save(cart);
+            Cart response = this.cartRepo.findByUserEmailAndIsPaidFalse(cart.getUserEmail());
 
-            try {
-                cart.getCartItems().forEach(
-                        item -> {
-                            item.setCart(response);
-                            this.cartItemRepo.save(item);
-                        });
-            } catch (Exception e) {
-                log.error("Item Error : {}", e.getMessage());
+            if (response == null) {
+                response = this.cartRepo.save(cart);
+                final Cart finalResponse = response;
+
+                try {
+                    cart.getCartItems().forEach(
+                            item -> {
+                                item.setCart(finalResponse);
+                                this.cartItemRepo.save(item);
+                            });
+                } catch (Exception e) {
+                    log.error("Item Error : {}", e.getMessage());
+                }
+
+                if (finalResponse == null)
+                    return null;
+                return finalResponse;
             }
 
-            if (response == null)
-                return null;
+            response = this.cartRepo.save(response);
             return response;
+
         } catch (Exception e) {
             log.error("Error: {}", e.getMessage());
             return null;
         }
+
     }
 
     /**
-     * The function fetches a cart object from the cart repository based on the given cartId.
+     * The function updates the cart by setting the "paid" attribute to true and
+     * saves the updated cart
+     * in the repository.
      * 
-     * @param cartId The cartId is the unique identifier of the cart that needs to be fetched.
+     * @param cart The "cart" parameter is an object of the Cart class. It
+     *             represents a shopping cart
+     *             that contains items that a user wants to purchase.
+     * @return The updated cart object is being returned.
+     */
+    @Override
+    public Cart updateCart(Cart cart) {
+        log.info("Updating the cart");
+
+        cart.setPaid(true);
+
+        return this.cartRepo.save(cart);
+    }
+
+    /**
+     * The function fetches a cart object from the cart repository based on the
+     * given cartId.
+     * 
+     * @param cartId The cartId is the unique identifier of the cart that needs to
+     *               be fetched.
      * @return The method is returning a Cart object.
      */
     @Override
     public Cart fetchCartById(long cartId) {
-      
+
         Cart response = this.cartRepo.findById(cartId).orElse(null);
 
-        if(response!=null)
+        if (response != null)
             return response;
-        
-        log.info("No cart FOund with given Id: {}",cartId);
+
+        log.info("No cart FOund with given Id: {}", cartId);
         return null;
     }
 

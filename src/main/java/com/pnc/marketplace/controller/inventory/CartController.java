@@ -13,9 +13,7 @@ import com.pnc.marketplace.model.Inventory.Cart;
 import com.pnc.marketplace.model.Inventory.CartItem;
 import com.pnc.marketplace.service.inventory.CartService;
 
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequestMapping("/cart")
 public class CartController {

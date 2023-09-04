@@ -1,6 +1,7 @@
 package com.pnc.marketplace.implementation.stripe;
 
 import java.time.LocalDate;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,10 +11,12 @@ import com.pnc.marketplace.database.seller.SellerDashboardRepository;
 import com.pnc.marketplace.database.seller.SellerRepository;
 import com.pnc.marketplace.database.stripe.SubscriptionRepository;
 import com.pnc.marketplace.model.User;
+import com.pnc.marketplace.model.Inventory.Cart;
 import com.pnc.marketplace.model.seller.Seller;
 import com.pnc.marketplace.model.seller.SellerDashboard;
 import com.pnc.marketplace.model.stripe.Subscription;
-import com.pnc.marketplace.service.stripe.SubscriptionService;
+import com.pnc.marketplace.service.inventory.CartService;
+import com.pnc.marketplace.service.stripe.StripeService;
 import com.pnc.marketplace.service.user.UserService;
 import com.pnc.marketplace.utils.StripeUtils;
 import com.pnc.marketplace.utils.enums.ProductAllowed;
@@ -28,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class SubscriptionSerivceImp implements SubscriptionService {
+public class StripeSerivceImp implements StripeService {
 
     @Value("${stripe.secert}")
     private String STRIPE_API;
@@ -42,7 +45,7 @@ public class SubscriptionSerivceImp implements SubscriptionService {
     private String Domain;
 
     @Autowired
-    private StripeUtils stripUtils;
+    private StripeUtils stripeUtils;
 
     @Autowired
     private SubscriptionRepository subscriptionRepo;
@@ -54,17 +57,20 @@ public class SubscriptionSerivceImp implements SubscriptionService {
     private SellerDashboardRepository sdRepo;
 
     @Autowired
+    private CartService cartService;
+
+    @Autowired
     private UserService userService;
 
     @Override
     public String paymentCheckout(String type, String email) {
 
-        Customer customer = this.stripUtils.checkAndCreateCustomer(email);
+        Customer customer = this.stripeUtils.checkAndCreateCustomer(email);
 
         if (customer == null)
             return null;
-            
-        ProductAllowed currentSubscription = this.stripUtils.getSubscriptionLevel(email);
+
+        ProductAllowed currentSubscription = this.stripeUtils.getSubscriptionLevel(email);
         ProductAllowed selectedSubscription = null;
 
         // ! To Stop User to subscribe from upper to lower tier
@@ -100,14 +106,14 @@ public class SubscriptionSerivceImp implements SubscriptionService {
                     .addLineItem(
                             SessionCreateParams.LineItem.builder()
                                     .setQuantity(1L)
-                                    .setPrice(this.stripUtils.getPriceToken(selectedSubscription.name()))
+                                    .setPrice(this.stripeUtils.getPriceToken(selectedSubscription.name()))
                                     .build())
                     .build();
 
             Session session;
             try {
                 session = Session.create(params);
-                log.info("Session : {}",session);
+                log.info("Session : {}", session);
                 return session.getUrl();
             } catch (StripeException e) {
                 log.info("ERROR: {}", e.getMessage());
@@ -116,6 +122,65 @@ public class SubscriptionSerivceImp implements SubscriptionService {
         }
 
         return null;
+    }
+
+    /**
+     * The `orderPaymentCheckout` function calculates the total amount of a cart,
+     * creates a Stripe
+     * session for payment, and returns the session URL.
+     * 
+     * @param cart The `cart` parameter is an object of the `Cart` class, which
+     *             represents the shopping
+     *             cart containing the items to be ordered and checked out.
+     * @return The method is returning a String, which is the URL of the session for
+     *         the payment
+     *         checkout.
+     */
+    @Override
+    public String orderPaymentCheckout(Cart cart) {
+
+        long shipingFee = 300L;
+        AtomicLong amount = new AtomicLong(0L);
+
+        cart.getCartItems().forEach(
+                item -> {
+                    amount.addAndGet((long) (item.getProductQuantity() * item.getProductPrice()));
+                });
+
+        Cart response = this.cartService.createCart(cart);
+
+
+        SessionCreateParams params = SessionCreateParams.builder()
+                .setMode(SessionCreateParams.Mode.PAYMENT)
+                .setSuccessUrl(Domain + "/home/cart-details")
+                .setCancelUrl(Domain + "/home/cart-details")
+                .setPaymentIntentData(
+                        SessionCreateParams.PaymentIntentData.builder()
+                                .putMetadata("cartId", String.valueOf(response.getCartId())).build())
+                .addLineItem(
+                        SessionCreateParams.LineItem.builder()
+                                .setQuantity(1L)
+                                .setPriceData(
+                                        SessionCreateParams.LineItem.PriceData.builder()
+                                                .setCurrency("PKR")
+                                                .setUnitAmount((amount.get() + shipingFee) * 100L)
+                                                .setProductData(
+                                                        SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                                                .setName(cart.getUserEmail())
+                                                                .build())
+                                                .build())
+                                .build())
+                .build();
+
+        Session session;
+        try {
+            session = Session.create(params);
+            return session.getUrl();
+        } catch (StripeException e) {
+            log.info("ERROR creating Session: {}", e.getMessage());
+            return null;
+        }
+
     }
 
     @Override
@@ -139,23 +204,23 @@ public class SubscriptionSerivceImp implements SubscriptionService {
         Subscription existingSubscription = this.subscriptionRepo.findByEmail(email);
 
         if (existingSubscription != null) {
-  
+
             existingSubscription.setCustomerId(customerId);
             existingSubscription.setSubscriptionId(SubscrptionId);
             existingSubscription.setDateValid(LocalDate.now().plusDays(30));
 
-            try {       
-                return  this.subscriptionRepo.save(existingSubscription);
+            try {
+                return this.subscriptionRepo.save(existingSubscription);
             } catch (Exception e) {
                 log.error("Error occurred while updating the subscription: {}", e.getMessage());
             }
 
         } else {
-            //* Create a new subscription entry
+            // * Create a new subscription entry
             log.info("Saving new Subscription");
 
             Subscription newSubscription = new Subscription();
-            
+
             newSubscription.setEmail(email);
             newSubscription.setCustomerId(customerId);
             newSubscription.setSubscriptionId(SubscrptionId);
@@ -206,13 +271,17 @@ public class SubscriptionSerivceImp implements SubscriptionService {
     }
 
     /**
-     * The addSubscription function updates the seller's subscription and dashboard based on the
+     * The addSubscription function updates the seller's subscription and dashboard
+     * based on the
      * product name and returns the updated seller object.
      * 
-     * @param productName The productName parameter is a String that represents the name of the product
-     * for which the subscription is being added.
-     * @param email The email parameter is a String that represents the email of the seller.
-     * @param amount The amount parameter represents the subscription amount for the seller.
+     * @param productName The productName parameter is a String that represents the
+     *                    name of the product
+     *                    for which the subscription is being added.
+     * @param email       The email parameter is a String that represents the email
+     *                    of the seller.
+     * @param amount      The amount parameter represents the subscription amount
+     *                    for the seller.
      * @return The method is currently returning null.
      */
     @Override
@@ -221,10 +290,9 @@ public class SubscriptionSerivceImp implements SubscriptionService {
         Seller response = this.sellerRepository.findByEmail(email);
 
         SellerDashboard sellerDashboard = this.sdRepo.findByEmail(email);
-        
-        if(sellerDashboard == null)
+
+        if (sellerDashboard == null)
             sellerDashboard = new SellerDashboard();
-        
 
         sellerDashboard.setUserId(response.getSellerId());
         sellerDashboard.setEmail(response.getEmail());
@@ -247,7 +315,7 @@ public class SubscriptionSerivceImp implements SubscriptionService {
             response.setMaxProducts(ProductAllowed.valueOf("EMPORIUMELITE").getValue());
         }
 
-        //* Seller , Dashboard modification and adding user credentials
+        // * Seller , Dashboard modification and adding user credentials
 
         response.setIsActive(true);
         this.sellerRepository.save(response);
@@ -259,10 +327,10 @@ public class SubscriptionSerivceImp implements SubscriptionService {
         user.setLastName(response.getLastName());
         user.setPhotoUri(response.getPicture());
         user.setUserEmail(response.getEmail());
-        user.setUserPassword(response.getFirstName()+response.getLastName());
-        log.info("=========> paswword {}",user.getUserPassword());
+        user.setUserPassword(response.getFirstName() + response.getLastName());
         this.userService.saveSeller(user);
 
         return response;
     }
+
 }

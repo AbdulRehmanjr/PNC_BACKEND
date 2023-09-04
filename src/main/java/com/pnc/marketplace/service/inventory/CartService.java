@@ -27,6 +27,15 @@ public interface CartService {
     Cart createCart(Cart cart);
 
     /**
+     * The function updateCart takes a Cart object as input and returns an updated Cart object.
+     * 
+     * @param cart The "cart" parameter is an object of type "Cart". It represents the shopping cart
+     * that needs to be updated.
+     * @return The method updateCart is returning a Cart object.
+     */
+    Cart updateCart(Cart cart);
+
+    /**
      * The function fetchCartById retrieves a cart object based on its ID.
      * 
      * @param cartId A long value representing the unique identifier of the cart.
